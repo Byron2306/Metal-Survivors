@@ -1,3 +1,4 @@
 *.zip filter=lfs diff=lfs merge=lfs -text
 *.png filter=lfs diff=lfs merge=lfs -text
 *.psd filter=lfs diff=lfs merge=lfs -text
+MetalSurvivors.zip filter=lfs diff=lfs merge=lfs -text
