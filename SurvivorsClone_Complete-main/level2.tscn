@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://dg2uqrkyk2lp0"]
+
+[ext_resource type="Texture2D" uid="uid://3hs3w5abmmr" path="res://Textures/Enemy/image1.jpg" id="1_3opl0"]
+[ext_resource type="PackedScene" uid="uid://dncgepmkc4jf4" path="res://World/player.tscn" id="2_45ii0"]
+[ext_resource type="PackedScene" uid="uid://ba2claihwes2y" path="res://Utility/enemy_spawner.tscn" id="3_mgy0g"]
+[ext_resource type="AudioStream" uid="uid://cx17uoqpwu5ni" path="res://Audio/Music/02 8 Bit Mixtapes - Darkthrone - Transilvanian Hunger.mp3" id="10_65udr"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_filter = 2
+texture_repeat = 2
+position = Vector2(-3, 58)
+texture = ExtResource("1_3opl0")
+region_rect = Rect2(-8000, -8000, 80000, 8000)
+region_filter_clip_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("2_45ii0")]
+position = Vector2(-2, -3)
+
+[node name="EnemySpawner" parent="." instance=ExtResource("3_mgy0g")]
+
+[node name="Loot" type="Node2D" parent="." groups=["loot"]]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_65udr")
+autoplay = true
+
+[connection signal="playerdeath" from="Player" to="Player" method="_on_playerdeath"]

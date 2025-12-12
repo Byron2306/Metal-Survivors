@@ -1,0 +1,125 @@
+[gd_scene load_steps=6 format=3 uid="uid://dfgj5fkkyuwfm"]
+
+[ext_resource type="Texture2D" uid="uid://bldcbg7um6j14" path="res://Textures/big winged, hor 1.png" id="2_xymuq"]
+[ext_resource type="FontFile" uid="uid://dswwdd2mbn85d" path="res://Font/metal lord.otf" id="3_8ll4b"]
+[ext_resource type="PackedScene" uid="uid://b7c7gsdx2rkjm" path="res://Utility/basic_button.tscn" id="4_y6uwv"]
+[ext_resource type="AudioStream" uid="uid://8ylitl2vvqv3" path="res://Audio/Music/01 8 Bit Mixtapes - Death - Crystal Mountain.mp3" id="5_aw1xu"]
+
+[sub_resource type="GDScript" id="GDScript_i5ytr"]
+script/source = "extends Control
+
+var level1 = \"res://World/world.tscn\"
+var level2 = \"res://World/level2.tscn\"
+var level3 = \"res://World/level3.tscn\"
+
+func _on_btn_play1_click_end():
+	print(\"Loading Stage 1\")
+	var error = get_tree().change_scene_to_file(level2)
+	if error != OK:
+		print(\"Failed to load Stage 1: \", error)
+
+func _on_btn_play2_click_end():
+	print(\"Loading Stage 2\")
+	var error = get_tree().change_scene_to_file(level1)
+	if error != OK:
+		print(\"Failed to load Stage 2: \", error)
+
+func _on_btn_play3_click_end():
+	print(\"Attempting to load Stage 3: \", level3)
+	var error = get_tree().change_scene_to_file(level3)
+	if error != OK:
+		print(\"Failed to load Stage 3: \", error)
+	else:
+		print(\"Scene change to Stage 3 initiated successfully\")
+
+func _on_btn_exit_click_end():
+	print(\"Exiting game\")
+	get_tree().quit()
+"
+
+[node name="Stage select" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_i5ytr")
+
+[node name="ColorRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 674.0
+offset_bottom = 381.0
+texture = ExtResource("2_xymuq")
+expand_mode = 1
+
+[node name="Control" type="Control" parent="ColorRect"]
+clip_contents = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = -22.0
+offset_top = -1.0
+offset_right = 678.0
+offset_bottom = 89.0
+theme_override_colors/font_color = Color(0.934339, 0.899764, 0.374388, 1)
+theme_override_fonts/font = ExtResource("3_8ll4b")
+theme_override_font_sizes/font_size = 70
+text = "Stage Select"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_aw1xu")
+autoplay = true
+
+[node name="btn_play1" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 95.0
+offset_top = 109.0
+offset_right = 219.0
+offset_bottom = 167.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 1:
+Black Metal"
+
+[node name="btn_play2" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 179.0
+offset_right = 218.0
+offset_bottom = 237.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 2:
+Death Metal"
+
+[node name="btn_play3" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 249.0
+offset_right = 218.0
+offset_bottom = 307.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 3:
+Thrash Metal"
+
+[node name="btn_exit" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 117.0
+offset_top = 314.0
+offset_right = 197.0
+offset_bottom = 347.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Back"
+
+[connection signal="click_end" from="btn_play1" to="." method="_on_btn_play1_click_end"]
+[connection signal="click_end" from="btn_play2" to="." method="_on_btn_play2_click_end"]
+[connection signal="click_end" from="btn_play3" to="." method="_on_btn_play_3_click_end"]
+[connection signal="click_end" from="btn_play3" to="." method="_on_btn_play3_click_end"]
+[connection signal="click_end" from="btn_exit" to="." method="_on_btn_exit_click_end"]

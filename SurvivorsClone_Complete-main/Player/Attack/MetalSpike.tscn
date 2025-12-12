@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://cf07m67xhn8fh"]
+
+[ext_resource type="Texture2D" uid="uid://espmwdf671cf" path="res://Textures/Items/Weapons/orbital.png" id="2_ugkqk"]
+
+[sub_resource type="GDScript" id="GDScript_j7bpo"]
+script/source = "extends Area2D
+
+var orbit_radius: float = 100.0  # This is the distance from the player at which this spike will rotate
+var angle: float = 0.0  # This angle defines the current position of the spike in its rotation
+var rotation_speed: float = 1.0  # Speed of the rotation
+var damage = 10  # damage amount
+
+# Reference to the player for position calculation
+@onready var player = get_tree().get_first_node_in_group(\"player\")
+
+func _ready():
+	add_to_group(\"attack\")
+
+func _process(delta: float) -> void:
+	angle += rotation_speed * delta
+	# Update position based on player's position, orbit_radius, and angle
+	global_position = player.global_position + Vector2(cos(angle), sin(angle)) * orbit_radius
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8osr2"]
+radius = 14.4222
+
+[node name="MetalSpike" type="Area2D" groups=["attack"]]
+position = Vector2(-51, 42)
+collision_layer = 0
+collision_mask = 2
+script = SubResource("GDScript_j7bpo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 1
+z_as_relative = false
+position = Vector2(55, -41)
+scale = Vector2(0.0895832, 0.0848959)
+texture = ExtResource("2_ugkqk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(55, -41)
+shape = SubResource("CircleShape2D_8osr2")

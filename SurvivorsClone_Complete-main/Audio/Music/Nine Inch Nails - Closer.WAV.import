@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bc2bjioyddugj"
+path="res://.godot/imported/Nine Inch Nails - Closer.WAV-9b08eb3bba534dd897e53cf3a8a2d365.sample"
+
+[deps]
+
+source_file="res://Audio/Music/Nine Inch Nails - Closer.WAV"
+dest_files=["res://.godot/imported/Nine Inch Nails - Closer.WAV-9b08eb3bba534dd897e53cf3a8a2d365.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

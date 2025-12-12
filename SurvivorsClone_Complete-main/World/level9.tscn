@@ -1,0 +1,311 @@
+[gd_scene load_steps=53 format=3 uid="uid://cq7mkdu2tdoga"]
+
+[ext_resource type="Texture2D" uid="uid://mfjjcckhx8i5" path="res://Textures/f9d9ccac-4691-4864-86a2-2b18ef260648.png" id="1_b7aii"]
+[ext_resource type="PackedScene" uid="uid://dncgepmkc4jf4" path="res://World/player.tscn" id="2_l3cfx"]
+[ext_resource type="PackedScene" uid="uid://ba2claihwes2y" path="res://Utility/enemy_spawner.tscn" id="3_j2igw"]
+[ext_resource type="PackedScene" uid="uid://fmvgcjmn5nx5" path="res://Enemy/indus1.tscn" id="4_b7aii"]
+[ext_resource type="Script" uid="uid://cu4uf4inyl6p3" path="res://Utility/spawn_info.gd" id="5_s6dld"]
+[ext_resource type="PackedScene" uid="uid://b8mvsp5nl732o" path="res://Enemy/indus2.tscn" id="6_l3cfx"]
+[ext_resource type="PackedScene" uid="uid://bfxkh7fch8axf" path="res://Enemy/indus3.tscn" id="7_j2igw"]
+[ext_resource type="PackedScene" uid="uid://b4vpwoer5o6nb" path="res://Enemy/indus4.tscn" id="8_crut1"]
+[ext_resource type="PackedScene" uid="uid://dnbhbbmh6t4am" path="res://Enemy/indus5.tscn" id="9_s6dld"]
+[ext_resource type="PackedScene" uid="uid://udlqd51mcin6" path="res://Enemy/indus6.tscn" id="10_fk1cn"]
+[ext_resource type="PackedScene" uid="uid://ihj4snbeu0db" path="res://Enemy/indus7.tscn" id="11_f01de"]
+[ext_resource type="PackedScene" uid="uid://rv0gbh1yexme" path="res://Enemy/indus8.tscn" id="12_gh4o3"]
+[ext_resource type="PackedScene" uid="uid://cat1368smpjr4" path="res://Enemy/indus9.tscn" id="13_ixvqd"]
+[ext_resource type="PackedScene" uid="uid://kc0tkv771sgp" path="res://Enemy/indus10.tscn" id="14_tdo41"]
+[ext_resource type="PackedScene" uid="uid://dt3h3xob7o6xt" path="res://Enemy/indus11.tscn" id="15_a5sg1"]
+[ext_resource type="PackedScene" uid="uid://clk00np1j1xgv" path="res://Enemy/indus12.tscn" id="16_w2tnw"]
+[ext_resource type="PackedScene" uid="uid://dbijlnjxuwoxr" path="res://Enemy/indus13.tscn" id="17_axv3o"]
+[ext_resource type="PackedScene" uid="uid://nyc4eem7naj4" path="res://Enemy/indus14.tscn" id="18_yh1ji"]
+[ext_resource type="PackedScene" uid="uid://w3ipxubetc47" path="res://Enemy/indus15.tscn" id="19_n7y68"]
+[ext_resource type="PackedScene" uid="uid://b8k0yonnfo8k4" path="res://Enemy/indus16.tscn" id="20_u648e"]
+[ext_resource type="PackedScene" uid="uid://dk3op7oa2s26d" path="res://Enemy/indus17.tscn" id="21_l6nti"]
+[ext_resource type="PackedScene" uid="uid://bhu56n7m7b86f" path="res://Enemy/indus18.tscn" id="22_me2gw"]
+[ext_resource type="AudioStream" uid="uid://byaeok2cq88c6" path="res://Audio/Music/Rammstein — Du Hast [MIDIfind.com].WAV" id="23_b7aii"]
+[ext_resource type="Texture2D" uid="uid://cwpmtm01cbc0g" path="res://Textures/ae23bcef-856f-4622-ad9c-1cbd446860d9.jpg" id="24_l3cfx"]
+[ext_resource type="AudioStream" uid="uid://bc2bjioyddugj" path="res://Audio/Music/Nine Inch Nails - Closer.WAV" id="25_j2igw"]
+[ext_resource type="AudioStream" uid="uid://ci5qecfxaegr8" path="res://Audio/Music/Marilyn Manson — The Beautiful People (2) [MIDIfind.com].WAV" id="26_crut1"]
+
+[sub_resource type="Resource" id="Resource_bcr1u"]
+script = ExtResource("5_s6dld")
+time_start = 0
+time_end = 180
+enemy = ExtResource("4_b7aii")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_cus64"]
+script = ExtResource("5_s6dld")
+time_start = 0
+time_end = 180
+enemy = ExtResource("6_l3cfx")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_2rhhc"]
+script = ExtResource("5_s6dld")
+time_start = 0
+time_end = 180
+enemy = ExtResource("7_j2igw")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_a8nfs"]
+script = ExtResource("5_s6dld")
+time_start = 180
+time_end = 360
+enemy = ExtResource("8_crut1")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_5if66"]
+script = ExtResource("5_s6dld")
+time_start = 180
+time_end = 360
+enemy = ExtResource("6_l3cfx")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_d0hgj"]
+script = ExtResource("5_s6dld")
+time_start = 180
+time_end = 360
+enemy = ExtResource("7_j2igw")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_m81qb"]
+script = ExtResource("5_s6dld")
+time_start = 360
+time_end = 540
+enemy = ExtResource("8_crut1")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_fpwuy"]
+script = ExtResource("5_s6dld")
+time_start = 360
+time_end = 540
+enemy = ExtResource("9_s6dld")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_udhae"]
+script = ExtResource("5_s6dld")
+time_start = 540
+time_end = 720
+enemy = ExtResource("10_fk1cn")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_1aydu"]
+script = ExtResource("5_s6dld")
+time_start = 540
+time_end = 720
+enemy = ExtResource("11_f01de")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_gkuqt"]
+script = ExtResource("5_s6dld")
+time_start = 720
+time_end = 900
+enemy = ExtResource("12_gh4o3")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_312pw"]
+script = ExtResource("5_s6dld")
+time_start = 720
+time_end = 900
+enemy = ExtResource("7_j2igw")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_dcchx"]
+script = ExtResource("5_s6dld")
+time_start = 720
+time_end = 900
+enemy = ExtResource("13_ixvqd")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_6iopg"]
+script = ExtResource("5_s6dld")
+time_start = 900
+time_end = 1080
+enemy = ExtResource("12_gh4o3")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_ai5rd"]
+script = ExtResource("5_s6dld")
+time_start = 900
+time_end = 1080
+enemy = ExtResource("14_tdo41")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_jm0p1"]
+script = ExtResource("5_s6dld")
+time_start = 900
+time_end = 1080
+enemy = ExtResource("11_f01de")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_iwi78"]
+script = ExtResource("5_s6dld")
+time_start = 1080
+time_end = 1180
+enemy = ExtResource("15_a5sg1")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_tpuh1"]
+script = ExtResource("5_s6dld")
+time_start = 1080
+time_end = 1180
+enemy = ExtResource("13_ixvqd")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_sp401"]
+script = ExtResource("5_s6dld")
+time_start = 1080
+time_end = 1180
+enemy = ExtResource("10_fk1cn")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_gxai1"]
+script = ExtResource("5_s6dld")
+time_start = 1080
+time_end = 1180
+enemy = ExtResource("16_w2tnw")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_erbhh"]
+script = ExtResource("5_s6dld")
+time_start = 1080
+time_end = 1180
+enemy = ExtResource("17_axv3o")
+enemy_num = 3
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_tg8m8"]
+script = ExtResource("5_s6dld")
+time_start = 1080
+time_end = 1180
+enemy = ExtResource("18_yh1ji")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_r8olj"]
+script = ExtResource("5_s6dld")
+time_start = 1080
+time_end = 1180
+enemy = ExtResource("19_n7y68")
+enemy_num = 2
+enemy_spawn_delay = 1
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_x28u6"]
+script = ExtResource("5_s6dld")
+time_start = 1080
+time_end = 1180
+enemy = ExtResource("20_u648e")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_dr2l1"]
+script = ExtResource("5_s6dld")
+time_start = 1080
+time_end = 1180
+enemy = ExtResource("21_l6nti")
+enemy_num = 1
+enemy_spawn_delay = 2
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[sub_resource type="Resource" id="Resource_fqrg8"]
+script = ExtResource("5_s6dld")
+time_start = 1180
+time_end = 1200
+enemy = ExtResource("22_me2gw")
+enemy_num = 1
+enemy_spawn_delay = 0
+metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 2
+texture_repeat = 2
+position = Vector2(2, 1)
+texture = ExtResource("1_b7aii")
+region_enabled = true
+region_rect = Rect2(-8000, -8000, 80000, 8000)
+region_filter_clip_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("2_l3cfx")]
+
+[node name="EnemySpawner" parent="." instance=ExtResource("3_j2igw")]
+spawns = Array[Resource]([SubResource("Resource_bcr1u"), SubResource("Resource_cus64"), SubResource("Resource_2rhhc"), SubResource("Resource_a8nfs"), SubResource("Resource_5if66"), SubResource("Resource_d0hgj"), SubResource("Resource_m81qb"), SubResource("Resource_fpwuy"), SubResource("Resource_udhae"), SubResource("Resource_1aydu"), SubResource("Resource_gkuqt"), SubResource("Resource_312pw"), SubResource("Resource_dcchx"), SubResource("Resource_6iopg"), SubResource("Resource_ai5rd"), SubResource("Resource_jm0p1"), SubResource("Resource_iwi78"), SubResource("Resource_tpuh1"), SubResource("Resource_sp401"), SubResource("Resource_gxai1"), SubResource("Resource_erbhh"), SubResource("Resource_tg8m8"), SubResource("Resource_r8olj"), SubResource("Resource_x28u6"), SubResource("Resource_dr2l1"), SubResource("Resource_fqrg8")])
+
+[node name="Loot" type="Node2D" parent="." groups=["loot"]]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("23_b7aii")
+volume_db = 2.421
+autoplay = true
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+texture_repeat = 3
+motion_mirroring = Vector2(1218, 819)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+texture_repeat = 2
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("24_l3cfx")
+centered = false
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("25_j2igw")
+volume_db = 2.476
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("26_crut1")
+volume_db = 1.238
+
+[connection signal="playerdeath" from="Player" to="Player" method="_on_playerdeath"]
+[connection signal="finished" from="AudioStreamPlayer" to="AudioStreamPlayer2" method="play"]
+[connection signal="finished" from="AudioStreamPlayer2" to="AudioStreamPlayer3" method="play"]
+[connection signal="finished" from="AudioStreamPlayer3" to="AudioStreamPlayer" method="play"]

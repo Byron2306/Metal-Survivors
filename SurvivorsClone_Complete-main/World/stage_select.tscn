@@ -1,0 +1,175 @@
+[gd_scene load_steps=6 format=3 uid="uid://3gx3vctkcjel"]
+
+[ext_resource type="Script" uid="uid://6tvif7hilh0m" path="res://World/stage_select.gd" id="1_0o01j"]
+[ext_resource type="Texture2D" uid="uid://bldcbg7um6j14" path="res://Textures/big winged, hor 1.png" id="2_xymuq"]
+[ext_resource type="FontFile" uid="uid://dswwdd2mbn85d" path="res://Font/metal lord.otf" id="3_8ll4b"]
+[ext_resource type="PackedScene" uid="uid://b7c7gsdx2rkjm" path="res://Utility/basic_button.tscn" id="4_y6uwv"]
+[ext_resource type="AudioStream" uid="uid://8ylitl2vvqv3" path="res://Audio/Music/01 8 Bit Mixtapes - Death - Crystal Mountain.mp3" id="5_aw1xu"]
+
+[node name="Stage select" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0o01j")
+
+[node name="ColorRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 674.0
+offset_bottom = 381.0
+mouse_filter = 2
+texture = ExtResource("2_xymuq")
+expand_mode = 1
+
+[node name="Control" type="Control" parent="ColorRect"]
+clip_contents = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = -22.0
+offset_top = -1.0
+offset_right = 678.0
+offset_bottom = 89.0
+theme_override_colors/font_color = Color(0.934339, 0.899764, 0.374388, 1)
+theme_override_fonts/font = ExtResource("3_8ll4b")
+theme_override_font_sizes/font_size = 70
+text = "Stage Select"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_aw1xu")
+autoplay = true
+
+[node name="btn_play1" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 101.0
+offset_top = 90.0
+offset_right = 234.0
+offset_bottom = 148.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 1:
+Black Metal"
+
+[node name="btn_play2" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 156.0
+offset_right = 232.0
+offset_bottom = 214.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 2:
+Death Metal"
+
+[node name="btn_play3" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 222.0
+offset_right = 234.0
+offset_bottom = 280.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 3:
+Thrash Metal"
+
+[node name="btn_play4" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 102.0
+offset_top = 288.0
+offset_right = 235.0
+offset_bottom = 346.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 4:
+Power Metal"
+
+[node name="btn_play5" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 272.0
+offset_top = 89.0
+offset_right = 406.0
+offset_bottom = 147.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 5:
+Doom Metal"
+
+[node name="btn_play6" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 154.0
+offset_right = 403.0
+offset_bottom = 212.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 6:
+Glam Metal"
+
+[node name="btn_play7" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 270.0
+offset_top = 220.0
+offset_right = 404.0
+offset_bottom = 278.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 7:
+Folk Metal"
+
+[node name="btn_play8" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 284.0
+offset_right = 405.0
+offset_bottom = 342.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 8:
+Prog Metal"
+
+[node name="btn_play9" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 452.0
+offset_top = 90.0
+offset_right = 645.0
+offset_bottom = 30.0
+scale = Vector2(0.7, 0.7)
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 9:
+Industrial 
+Metal"
+
+[node name="btn_play10" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 452.0
+offset_top = 155.0
+offset_right = 622.0
+offset_bottom = 227.0
+scale = Vector2(0.8, 0.8)
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Stage 10:
+Nu Metal"
+
+[node name="btn_exit" parent="." instance=ExtResource("4_y6uwv")]
+layout_mode = 0
+offset_left = 555.0
+offset_top = 5.0
+offset_right = 635.0
+offset_bottom = 38.0
+theme_override_fonts/font = ExtResource("3_8ll4b")
+text = "Back"
+
+[connection signal="click_end" from="btn_play1" to="." method="_on_btn_play1_click_end"]
+[connection signal="click_end" from="btn_play2" to="." method="_on_btn_play2_click_end"]
+[connection signal="click_end" from="btn_play3" to="." method="_on_btn_play3_click_end"]
+[connection signal="click_end" from="btn_play4" to="." method="_on_btn_play4_click_end"]
+[connection signal="click_end" from="btn_play5" to="." method="_on_btn_play5_click_end"]
+[connection signal="click_end" from="btn_play6" to="." method="_on_btn_play6_click_end"]
+[connection signal="click_end" from="btn_play7" to="." method="_on_btn_play7_click_end"]
+[connection signal="click_end" from="btn_play8" to="." method="_on_btn_play8_click_end"]
+[connection signal="click_end" from="btn_play9" to="." method="_on_btn_play9_click_end"]
+[connection signal="click_end" from="btn_play10" to="." method="_on_btn_play_10_click_end"]
+[connection signal="click_end" from="btn_exit" to="." method="_on_btn_exit_click_end"]

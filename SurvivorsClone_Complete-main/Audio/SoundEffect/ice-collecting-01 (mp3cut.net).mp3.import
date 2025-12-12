@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://crrfybrxvfulq"
+path="res://.godot/imported/ice-collecting-01 (mp3cut.net).mp3-c95b633ba208a1a1ef4aac3d1fc1bed6.mp3str"
+
+[deps]
+
+source_file="res://Audio/SoundEffect/ice-collecting-01 (mp3cut.net).mp3"
+dest_files=["res://.godot/imported/ice-collecting-01 (mp3cut.net).mp3-c95b633ba208a1a1ef4aac3d1fc1bed6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

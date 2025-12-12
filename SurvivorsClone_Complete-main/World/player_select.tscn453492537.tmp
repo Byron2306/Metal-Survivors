@@ -1,0 +1,116 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4805ibkoplxo"]
+
+[ext_resource type="Script" uid="uid://y5epvef6ydoa" path="res://World/player_select.gd" id="1_psgd"]
+[ext_resource type="Texture2D" uid="uid://c2ne12yibfwdk" path="res://Textures/character.png" id="2_3g1hu"]
+[ext_resource type="FontFile" uid="uid://dswwdd2mbn85d" path="res://Font/metal lord.otf" id="3_font"]
+[ext_resource type="PackedScene" uid="uid://b7c7gsdx2rkjm" path="res://Utility/basic_button.tscn" id="4_btn"]
+[ext_resource type="AudioStream" uid="uid://8ylitl2vvqv3" path="res://Audio/Music/01 8 Bit Mixtapes - Death - Crystal Mountain.mp3" id="5_music"]
+[ext_resource type="Texture2D" uid="uid://c54eriqayc5kl" path="res://Textures/Player/axel.png" id="6_axel"]
+[ext_resource type="Texture2D" uid="uid://cn4mwk020rqla" path="res://Textures/Player/lucias.png" id="7_lucias"]
+
+[node name="PlayerSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_psgd")
+
+[node name="ColorRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 674.0
+offset_bottom = 381.0
+texture = ExtResource("2_3g1hu")
+expand_mode = 1
+
+[node name="Control" type="Control" parent="ColorRect"]
+clip_contents = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = -22.0
+offset_top = -1.0
+offset_right = 678.0
+offset_bottom = 89.0
+theme_override_colors/font_color = Color(0.934339, 0.899764, 0.374388, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 70
+text = "Player Select"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_music")
+autoplay = true
+
+[node name="btn_axel" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 150.0
+offset_right = 300.0
+offset_bottom = 250.0
+theme_override_fonts/font = ExtResource("3_font")
+text = "Axel"
+
+[node name="AxelIcon" type="TextureRect" parent="btn_axel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -30.0
+offset_right = -30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_axel")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_lucias" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 350.0
+offset_top = 150.0
+offset_right = 550.0
+offset_bottom = 250.0
+theme_override_fonts/font = ExtResource("3_font")
+text = "Lucias"
+
+[node name="LuciasIcon" type="TextureRect" parent="btn_lucias"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -97.0
+offset_top = -30.0
+offset_right = -37.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_lucias")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_back" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 280.0
+offset_top = 300.0
+offset_right = 360.0
+offset_bottom = 330.0
+theme_override_fonts/font = ExtResource("3_font")
+text = "Back"
+
+[connection signal="click_end" from="btn_axel" to="." method="_on_btn_axel_click_end"]
+[connection signal="click_end" from="btn_lucias" to="." method="_on_btn_lucias_click_end"]
+[connection signal="click_end" from="btn_back" to="." method="_on_btn_back_click_end"]

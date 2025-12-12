@@ -1,0 +1,351 @@
+[gd_scene load_steps=16 format=3 uid="uid://c4805ibkoplxo"]
+
+[ext_resource type="Script" uid="uid://y5epvef6ydoa" path="res://World/player_select.gd" id="1_psgd"]
+[ext_resource type="Texture2D" uid="uid://c2ne12yibfwdk" path="res://Textures/character.png" id="2_3g1hu"]
+[ext_resource type="FontFile" uid="uid://dswwdd2mbn85d" path="res://Font/metal lord.otf" id="3_font"]
+[ext_resource type="PackedScene" uid="uid://b7c7gsdx2rkjm" path="res://Utility/basic_button.tscn" id="4_btn"]
+[ext_resource type="AudioStream" uid="uid://8ylitl2vvqv3" path="res://Audio/Music/01 8 Bit Mixtapes - Death - Crystal Mountain.mp3" id="5_music"]
+[ext_resource type="Texture2D" uid="uid://c54eriqayc5kl" path="res://Textures/Player/Axel.png" id="6_axel"]
+[ext_resource type="Texture2D" uid="uid://cn4mwk020rqla" path="res://Textures/Player/Lucias.png" id="7_lucias"]
+[ext_resource type="Texture2D" uid="uid://bxo7aqty2b2me" path="res://Textures/Player/Brutus.png" id="8_qf6du"]
+[ext_resource type="Texture2D" uid="uid://18cc2bmryd3l" path="res://Textures/Player/Aiden.png" id="9_aiden"]
+[ext_resource type="Texture2D" uid="uid://cq335xvyiwl0a" path="res://Textures/Player/Doug.png" id="10_doug"]
+[ext_resource type="Texture2D" uid="uid://o6dn0h1h1fsg" path="res://Textures/Player/Jesse.png" id="11_jesse"]
+[ext_resource type="Texture2D" uid="uid://d8d2hccyvxce" path="res://Textures/Player/Malcolm.png" id="12_malcolm"]
+[ext_resource type="Texture2D" uid="uid://bj1j3gq4dpflp" path="res://Textures/Player/Xavier.png" id="13_xavier"]
+[ext_resource type="Texture2D" uid="uid://dl6g15hxb7wcr" path="res://Textures/Player/Stryker.png" id="14_stryker"]
+[ext_resource type="Texture2D" uid="uid://dkq5lrvl0nw52" path="res://Textures/Player/Kyle.png" id="15_kyle"]
+
+[node name="PlayerSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_psgd")
+
+[node name="ColorRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 676.0
+offset_bottom = 383.0
+texture = ExtResource("2_3g1hu")
+expand_mode = 1
+
+[node name="Control" type="Control" parent="ColorRect"]
+clip_contents = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = -22.0
+offset_top = -1.0
+offset_right = 678.0
+offset_bottom = 89.0
+theme_override_colors/font_color = Color(0.934339, 0.899764, 0.374388, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 70
+text = "Player Select"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_music")
+autoplay = true
+
+[node name="btn_axel" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 99.0
+offset_right = 204.0
+offset_bottom = 159.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "        Axel"
+
+[node name="AxelIcon" type="TextureRect" parent="btn_axel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -61.0
+offset_top = -14.0
+offset_right = -31.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_axel")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_lucias" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 59.0
+offset_top = 162.0
+offset_right = 204.0
+offset_bottom = 222.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "        Lucias"
+
+[node name="LuciasIcon" type="TextureRect" parent="btn_lucias"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -61.5
+offset_top = -14.0
+offset_right = -31.5
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_lucias")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_brutus" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 59.0
+offset_top = 226.0
+offset_right = 204.0
+offset_bottom = 286.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "        Brutus"
+
+[node name="BrutusIcon" type="TextureRect" parent="btn_brutus"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -61.5
+offset_top = -13.0
+offset_right = -31.5
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_qf6du")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_aiden" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 290.0
+offset_right = 204.0
+offset_bottom = 348.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "        Aiden"
+
+[node name="AidenIcon" type="TextureRect" parent="btn_aiden"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -16.0
+offset_right = -32.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_aiden")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_doug" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 258.0
+offset_top = 96.0
+offset_right = 409.0
+offset_bottom = 156.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "        Doug"
+
+[node name="DougIcon" type="TextureRect" parent="btn_doug"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.5
+offset_top = -13.0
+offset_right = -35.5
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_doug")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_jesse" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 258.0
+offset_top = 159.0
+offset_right = 408.0
+offset_bottom = 219.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "        Jesse"
+
+[node name="JesseIcon" type="TextureRect" parent="btn_jesse"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.0
+offset_top = -15.0
+offset_right = -35.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_jesse")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_malcolm" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 257.0
+offset_top = 222.0
+offset_right = 407.0
+offset_bottom = 282.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "        Malcolm"
+
+[node name="MalcolmIcon" type="TextureRect" parent="btn_malcolm"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -66.0
+offset_top = -16.0
+offset_right = -36.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_malcolm")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_xavier" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 257.0
+offset_top = 287.0
+offset_right = 407.0
+offset_bottom = 347.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "        Xavier"
+
+[node name="XavierIcon" type="TextureRect" parent="btn_xavier"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.0
+offset_top = -16.0
+offset_right = -35.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_xavier")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_stryker" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 451.0
+offset_top = 97.0
+offset_right = 601.0
+offset_bottom = 157.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "        Stryker"
+
+[node name="StrykerIcon" type="TextureRect" parent="btn_stryker"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -68.0
+offset_top = -16.0
+offset_right = -38.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_stryker")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_kyle" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 450.0
+offset_top = 162.0
+offset_right = 599.0
+offset_bottom = 222.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "        Kyle"
+
+[node name="KyleIcon" type="TextureRect" parent="btn_kyle"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.5
+offset_top = -16.0
+offset_right = -35.5
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_kyle")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="btn_back" parent="." instance=ExtResource("4_btn")]
+layout_mode = 0
+offset_left = 558.0
+offset_top = 4.0
+offset_right = 638.0
+offset_bottom = 37.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "Back"
+
+[connection signal="click_end" from="btn_axel" to="." method="_on_btn_axel_click_end"]
+[connection signal="click_end" from="btn_lucias" to="." method="_on_btn_lucias_click_end"]
+[connection signal="click_end" from="btn_brutus" to="." method="_on_btn_brutus_click_end"]
+[connection signal="click_end" from="btn_aiden" to="." method="_on_btn_aiden_click_end"]
+[connection signal="click_end" from="btn_doug" to="." method="_on_btn_doug_click_end"]
+[connection signal="click_end" from="btn_jesse" to="." method="_on_btn_jesse_click_end"]
+[connection signal="click_end" from="btn_malcolm" to="." method="_on_btn_malcolm_click_end"]
+[connection signal="click_end" from="btn_xavier" to="." method="_on_btn_xavier_click_end"]
+[connection signal="click_end" from="btn_stryker" to="." method="_on_btn_stryker_click_end"]
+[connection signal="click_end" from="btn_kyle" to="." method="_on_btn_kyle_click_end"]
+[connection signal="click_end" from="btn_back" to="." method="_on_btn_back_click_end"]

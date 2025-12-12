@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dah7ym4u47spr"
+path="res://.godot/imported/Dream Theater — Pull Me Under (4) [MIDIfind.com].WAV-a203ac13e2dc3c64c61a376264646536.sample"
+
+[deps]
+
+source_file="res://Audio/Music/Dream Theater — Pull Me Under (4) [MIDIfind.com].WAV"
+dest_files=["res://.godot/imported/Dream Theater — Pull Me Under (4) [MIDIfind.com].WAV-a203ac13e2dc3c64c61a376264646536.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

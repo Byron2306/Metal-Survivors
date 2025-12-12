@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c0rqm130pjxdc"
+path="res://.godot/imported/Eluveitie — Inis Mona [MIDIfind.com].WAV-e2be80668174f1406af9639084f362a6.sample"
+
+[deps]
+
+source_file="res://Audio/Music/Eluveitie — Inis Mona [MIDIfind.com].WAV"
+dest_files=["res://.godot/imported/Eluveitie — Inis Mona [MIDIfind.com].WAV-e2be80668174f1406af9639084f362a6.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

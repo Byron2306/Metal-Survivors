@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://8ylitl2vvqv3"
+path="res://.godot/imported/01 8 Bit Mixtapes - Death - Crystal Mountain.mp3-f2a34d01d19e280af7d297c1ab09528d.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/01 8 Bit Mixtapes - Death - Crystal Mountain.mp3"
+dest_files=["res://.godot/imported/01 8 Bit Mixtapes - Death - Crystal Mountain.mp3-f2a34d01d19e280af7d297c1ab09528d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

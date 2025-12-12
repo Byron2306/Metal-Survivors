@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://wpliv06gy0pq"]
+
+[ext_resource type="Script" uid="uid://nna5hai1v5lq" path="res://Player/Attack/ice_spear.gd" id="1_4el3j"]
+[ext_resource type="Texture2D" uid="uid://bxa3cf2y0rmkq" path="res://Textures/Items/Weapons/shock1.png" id="2_cq1uu"]
+[ext_resource type="AudioStream" uid="uid://bx6spwco5oob6" path="res://Audio/SoundEffect/wild-guitar_D#_minor.wav" id="3_uqxo6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hsqbs"]
+atlas = ExtResource("2_cq1uu")
+region = Rect2(0, 0, 64, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1280"]
+atlas = ExtResource("2_cq1uu")
+region = Rect2(64, 0, 64, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3mp1u"]
+atlas = ExtResource("2_cq1uu")
+region = Rect2(128, 0, 64, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pk66e"]
+atlas = ExtResource("2_cq1uu")
+region = Rect2(192, 0, 64, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xecd5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hsqbs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1280")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3mp1u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pk66e")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p4tiy"]
+size = Vector2(6.36396, 33.234)
+
+[node name="IceSpear" type="Area2D" groups=["attack"]]
+top_level = true
+scale = Vector2(0.1, 0.1)
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_4el3j")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-9.53674e-07, -9.53674e-07)
+scale = Vector2(0.625, 1)
+sprite_frames = SubResource("SpriteFrames_xecd5")
+autoplay = "default"
+frame_progress = 0.305324
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["attack"]]
+position = Vector2(0, -2.52435e-30)
+rotation = -0.785398
+shape = SubResource("RectangleShape2D_p4tiy")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="snd_play" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_uqxo6")
+autoplay = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

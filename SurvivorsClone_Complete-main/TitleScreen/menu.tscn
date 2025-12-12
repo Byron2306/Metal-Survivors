@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=3 uid="uid://dcyka5e06knff"]
+
+[ext_resource type="Script" uid="uid://c11sbswhyxu1r" path="res://World/menu.gd" id="1_bmpa2"]
+[ext_resource type="Texture2D" uid="uid://bh0ifd2mkf7u7" path="res://Textures/Video game cove 1 (1).png" id="2_22q1n"]
+[ext_resource type="PackedScene" uid="uid://b7c7gsdx2rkjm" path="res://Utility/basic_button.tscn" id="3_kwsdd"]
+[ext_resource type="FontFile" uid="uid://dswwdd2mbn85d" path="res://Font/metal lord.otf" id="3_q0yt5"]
+[ext_resource type="AudioStream" uid="uid://8ylitl2vvqv3" path="res://Audio/Music/01 8 Bit Mixtapes - Death - Crystal Mountain.mp3" id="5_l7xe2"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bmpa2")
+
+[node name="ColorRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 674.0
+offset_bottom = 381.0
+texture = ExtResource("2_22q1n")
+expand_mode = 1
+
+[node name="Control" type="Control" parent="ColorRect"]
+clip_contents = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = -22.0
+offset_top = -1.0
+offset_right = 678.0
+offset_bottom = 89.0
+theme_override_colors/font_color = Color(0.934339, 0.899764, 0.374388, 1)
+theme_override_fonts/font = ExtResource("3_q0yt5")
+theme_override_font_sizes/font_size = 70
+text = "Metal Survivors"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="btn_play" parent="." instance=ExtResource("3_kwsdd")]
+layout_mode = 0
+offset_left = 280.0
+offset_top = 250.0
+offset_right = 360.0
+offset_bottom = 280.0
+theme_override_fonts/font = ExtResource("3_q0yt5")
+text = "Play"
+
+[node name="btn_exit" parent="." instance=ExtResource("3_kwsdd")]
+layout_mode = 0
+offset_left = 280.0
+offset_top = 290.0
+offset_right = 360.0
+offset_bottom = 320.0
+theme_override_fonts/font = ExtResource("3_q0yt5")
+text = "Exit"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_l7xe2")
+autoplay = true
+
+[connection signal="click_end" from="btn_play" to="." method="_on_btn_play_click_end"]
+[connection signal="click_end" from="btn_exit" to="." method="_on_btn_exit_click_end"]

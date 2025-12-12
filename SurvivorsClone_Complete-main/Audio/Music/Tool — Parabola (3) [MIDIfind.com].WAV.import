@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c838rchgckc6v"
+path="res://.godot/imported/Tool — Parabola (3) [MIDIfind.com].WAV-6d6fd79b1f9c8185a0e59df963cf6d8e.sample"
+
+[deps]
+
+source_file="res://Audio/Music/Tool — Parabola (3) [MIDIfind.com].WAV"
+dest_files=["res://.godot/imported/Tool — Parabola (3) [MIDIfind.com].WAV-6d6fd79b1f9c8185a0e59df963cf6d8e.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

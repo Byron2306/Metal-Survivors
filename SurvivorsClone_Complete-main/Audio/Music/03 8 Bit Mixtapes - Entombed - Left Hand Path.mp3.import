@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://1vvybf6ih5lr"
+path="res://.godot/imported/03 8 Bit Mixtapes - Entombed - Left Hand Path.mp3-56baad1f43e2ab3968147328608f2d6b.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/03 8 Bit Mixtapes - Entombed - Left Hand Path.mp3"
+dest_files=["res://.godot/imported/03 8 Bit Mixtapes - Entombed - Left Hand Path.mp3-56baad1f43e2ab3968147328608f2d6b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
