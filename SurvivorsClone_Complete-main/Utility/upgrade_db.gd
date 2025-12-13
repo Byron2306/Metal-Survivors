@@ -489,6 +489,246 @@ const UPGRADES = {
 		"prerequisite": ["armor3"],
 		"type": "upgrade"
 	},
+	"power_chord1": {
+		"icon": ICON_PATH + "power.png",
+		"displayname": "Power Chord",
+		"details": "Increases weapon damage by 10%",
+		"level": "Level: 1",
+		"prerequisite": [],
+		"type": "upgrade"
+	},
+	"power_chord2": {
+		"icon": ICON_PATH + "power.png",
+		"displayname": "Power Chord",
+		"details": "Increases weapon damage by an additional 10%",
+		"level": "Level: 2",
+		"prerequisite": ["power_chord1"],
+		"type": "upgrade"
+	},
+	"power_chord3": {
+		"icon": ICON_PATH + "power.png",
+		"displayname": "Power Chord",
+		"details": "Increases weapon damage by an additional 10%",
+		"level": "Level: 3",
+		"prerequisite": ["power_chord2"],
+		"type": "upgrade"
+	},
+	"power_chord4": {
+		"icon": ICON_PATH + "power.png",
+		"displayname": "Power Chord",
+		"details": "Increases weapon damage by an additional 10%",
+		"level": "Level: 4",
+		"prerequisite": ["power_chord3"],
+		"type": "upgrade"
+	},
+	"power_chord5": {
+		"icon": ICON_PATH + "power.png",
+		"displayname": "Power Chord",
+		"details": "Increases weapon damage by an additional 10%",
+		"level": "Level: 5",
+		"prerequisite": ["power_chord4"],
+		"type": "upgrade"
+	},
+	"shred_drive1": {
+		"icon": ICON_PATH + "drive.png",
+		"displayname": "Shred Drive",
+		"details": "Increases weapon speed by 10%",
+		"level": "Level: 1",
+		"prerequisite": [],
+		"type": "upgrade"
+	},
+	"shred_drive2": {
+		"icon": ICON_PATH + "drive.png",
+		"displayname": "Shred Drive",
+		"details": "Increases weapon speed by an additional 10%",
+		"level": "Level: 2",
+		"prerequisite": ["shred_drive1"],
+		"type": "upgrade"
+	},
+	"shred_drive3": {
+		"icon": ICON_PATH + "drive.png",
+		"displayname": "Shred Drive",
+		"details": "Increases weapon speed by an additional 10%",
+		"level": "Level: 3",
+		"prerequisite": ["shred_drive2"],
+		"type": "upgrade"
+	},
+	"shred_drive4": {
+		"icon": ICON_PATH + "drive.png",
+		"displayname": "Shred Drive",
+		"details": "Increases weapon speed by an additional 10%",
+		"level": "Level: 4",
+		"prerequisite": ["shred_drive3"],
+		"type": "upgrade"
+	},
+	"shred_drive5": {
+		"icon": ICON_PATH + "drive.png",
+		"displayname": "Shred Drive",
+		"details": "Increases weapon speed by an additional 10%",
+		"level": "Level: 5",
+		"prerequisite": ["shred_drive4"],
+		"type": "upgrade"
+	},
+	"resonance_pedal1": {
+		"icon": ICON_PATH + "pedal.png",
+		"displayname": "Resonance Pedal",
+		"details": "Increases effect duration by 10%",
+		"level": "Level: 1",
+		"prerequisite": [],
+		"type": "upgrade"
+	},
+	"resonance_pedal2": {
+		"icon": ICON_PATH + "pedal.png",
+		"displayname": "Resonance Pedal",
+		"details": "Increases effect duration by an additional 10%",
+		"level": "Level: 2",
+		"prerequisite": ["resonance_pedal1"],
+		"type": "upgrade"
+	},
+	"resonance_pedal3": {
+		"icon": ICON_PATH + "pedal.png",
+		"displayname": "Resonance Pedal",
+		"details": "Increases effect duration by an additional 10%",
+		"level": "Level: 3",
+		"prerequisite": ["resonance_pedal2"],
+		"type": "upgrade"
+	},
+	"resonance_pedal4": {
+		"icon": ICON_PATH + "pedal.png",
+		"displayname": "Resonance Pedal",
+		"details": "Increases effect duration by an additional 10%",
+		"level": "Level: 4",
+		"prerequisite": ["resonance_pedal3"],
+		"type": "upgrade"
+	},
+	"resonance_pedal5": {
+		"icon": ICON_PATH + "pedal.png",
+		"displayname": "Resonance Pedal",
+		"details": "Increases effect duration by an additional 10%",
+		"level": "Level: 5",
+		"prerequisite": ["resonance_pedal4"],
+		"type": "upgrade"
+	},
+	"stage_magnet1": {
+		"icon": ICON_PATH + "magnet.png",
+		"displayname": "Stage Magnet",
+		"details": "Increases pickup radius by 10%",
+		"level": "Level: 1",
+		"prerequisite": [],
+		"type": "upgrade"
+	},
+	"stage_magnet2": {
+		"icon": ICON_PATH + "magnet.png",
+		"displayname": "Stage Magnet",
+		"details": "Increases pickup radius by an additional 10%",
+		"level": "Level: 2",
+		"prerequisite": ["stage_magnet1"],
+		"type": "upgrade"
+	},
+	"stage_magnet3": {
+		"icon": ICON_PATH + "magnet.png",
+		"displayname": "Stage Magnet",
+		"details": "Increases pickup radius by an additional 10%",
+		"level": "Level: 3",
+		"prerequisite": ["stage_magnet2"],
+		"type": "upgrade"
+	},
+	"stage_magnet4": {
+		"icon": ICON_PATH + "magnet.png",
+		"displayname": "Stage Magnet",
+		"details": "Increases pickup radius by an additional 10%",
+		"level": "Level: 4",
+		"prerequisite": ["stage_magnet3"],
+		"type": "upgrade"
+	},
+	"stage_magnet5": {
+		"icon": ICON_PATH + "magnet.png",
+		"displayname": "Stage Magnet",
+		"details": "Increases pickup radius by an additional 10%",
+		"level": "Level: 5",
+		"prerequisite": ["stage_magnet4"],
+		"type": "upgrade"
+	},
+	"blood_oath1": {
+		"icon": ICON_PATH + "oath.png",
+		"displayname": "Blood Oath",
+		"details": "Regenerates 0.2 HP per second",
+		"level": "Level: 1",
+		"prerequisite": [],
+		"type": "upgrade"
+	},
+	"blood_oath2": {
+		"icon": ICON_PATH + "oath.png",
+		"displayname": "Blood Oath",
+		"details": "Regenerates an additional 0.2 HP per second",
+		"level": "Level: 2",
+		"prerequisite": ["blood_oath1"],
+		"type": "upgrade"
+	},
+	"blood_oath3": {
+		"icon": ICON_PATH + "oath.png",
+		"displayname": "Blood Oath",
+		"details": "Regenerates an additional 0.2 HP per second",
+		"level": "Level: 3",
+		"prerequisite": ["blood_oath2"],
+		"type": "upgrade"
+	},
+	"blood_oath4": {
+		"icon": ICON_PATH + "oath.png",
+		"displayname": "Blood Oath",
+		"details": "Regenerates an additional 0.2 HP per second",
+		"level": "Level: 4",
+		"prerequisite": ["blood_oath3"],
+		"type": "upgrade"
+	},
+	"blood_oath5": {
+		"icon": ICON_PATH + "oath.png",
+		"displayname": "Blood Oath",
+		"details": "Regenerates an additional 0.2 HP per second",
+		"level": "Level: 5",
+		"prerequisite": ["blood_oath4"],
+		"type": "upgrade"
+	},
+	"iron_will1": {
+		"icon": ICON_PATH + "will.png",
+		"displayname": "Iron Will",
+		"details": "Increases maximum HP by 20%",
+		"level": "Level: 1",
+		"prerequisite": [],
+		"type": "upgrade"
+	},
+	"iron_will2": {
+		"icon": ICON_PATH + "will.png",
+		"displayname": "Iron Will",
+		"details": "Increases maximum HP by an additional 20%",
+		"level": "Level: 2",
+		"prerequisite": ["iron_will1"],
+		"type": "upgrade"
+	},
+	"iron_will3": {
+		"icon": ICON_PATH + "will.png",
+		"displayname": "Iron Will",
+		"details": "Increases maximum HP by an additional 20%",
+		"level": "Level: 3",
+		"prerequisite": ["iron_will2"],
+		"type": "upgrade"
+	},
+	"iron_will4": {
+		"icon": ICON_PATH + "will.png",
+		"displayname": "Iron Will",
+		"details": "Increases maximum HP by an additional 20%",
+		"level": "Level: 4",
+		"prerequisite": ["iron_will3"],
+		"type": "upgrade"
+	},
+	"iron_will5": {
+		"icon": ICON_PATH + "will.png",
+		"displayname": "Iron Will",
+		"details": "Increases maximum HP by an additional 20%",
+		"level": "Level: 5",
+		"prerequisite": ["iron_will4"],
+		"type": "upgrade"
+	},
 	"speed1": {
 		"icon": ICON_PATH + "boots_4_green.png",
 		"displayname": "Speed",
