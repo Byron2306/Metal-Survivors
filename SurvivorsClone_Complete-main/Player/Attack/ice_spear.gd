@@ -5,13 +5,17 @@ const IceSpearScene: PackedScene = preload("res://Player/Attack/ice_spear.tscn")
 
 var spawn_extras: bool = true
 var level: int = 1
-var hp: int = 1             # pierce count
+var hp: int = 1
 var speed: float = 100.0
 var damage: int = 5
 var knockback_amount: int = 100
 var attack_size: float = 1.0
 
 var move_direction: Vector2 = Vector2.ZERO
+
+# ─── PASSIVE-SCALED (CACHED) ─────────────────────
+var final_damage: int
+var final_speed: float
 
 @onready var player           = get_tree().get_first_node_in_group("player")
 @onready var sprite: AnimatedSprite2D   = $Sprite2D
@@ -20,6 +24,12 @@ var move_direction: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	_set_stats()
+
+	# ─── APPLY PASSIVES (ONCE) ─────────────────────
+	final_damage = int(round(damage * player.damage_multiplier))
+	final_speed = speed * player.projectile_speed_multiplier
+
+	attack_size = 1.0 * (1 + player.spell_size)
 	sprite.scale = Vector2.ONE * attack_size
 	_animate_size()
 
@@ -27,13 +37,14 @@ func _ready() -> void:
 	var body_c = Callable(self, "_on_body_entered")
 	if not is_connected("body_entered", body_c):
 		connect("body_entered", body_c)
+
 	var timer_c = Callable(self, "_on_timer_timeout")
 	if not despawn_timer.is_connected("timeout", timer_c):
 		despawn_timer.connect("timeout", timer_c)
 
 	var enemies: Array = get_tree().get_nodes_in_group("enemy")
 
-	# Multi‑spear for level > 1
+	# ─── MULTI-SPEAR (UNCHANGED) ───────────────────
 	if level > 1 and spawn_extras:
 		spawn_extras = false
 		var spears: Array = [self]
@@ -65,7 +76,7 @@ func _ready() -> void:
 			spear.rotation = dir.angle() + deg_to_rad(135)
 		return
 
-	# Single‑spear path (level == 1)
+	# ─── SINGLE-SPEAR PATH ─────────────────────────
 	if enemies.size() > 0:
 		var best = enemies[0]
 		var bestd: float = best.global_position.distance_to(global_position)
@@ -83,13 +94,14 @@ func _ready() -> void:
 	despawn_timer.start()
 
 func _physics_process(delta: float) -> void:
-	global_position += move_direction * speed * delta
+	global_position += move_direction * final_speed * delta
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("enemy") and body.has_method("_on_hurt_box_hurt"):
 		var ang = global_position.direction_to(body.global_position)
-		body._on_hurt_box_hurt(damage, ang, knockback_amount)
+		body._on_hurt_box_hurt(final_damage, ang, knockback_amount)
 		collision_shape.set_deferred("disabled", true)
+
 		if level < 4:
 			queue_free()
 		else:
@@ -101,7 +113,7 @@ func _on_timer_timeout() -> void:
 	queue_free()
 
 func _set_stats() -> void:
-	# Damage now scales 2 → 3 → 4 → 5 at levels 1–4
+	# Damage scaling by level
 	if level == 1:
 		damage = 2
 	elif level == 2:
@@ -112,18 +124,14 @@ func _set_stats() -> void:
 		damage = 5
 
 	# Pierce only at level 4
-	if level >= 4:
-		hp = 2
-	else:
-		hp = 1
+	hp = 2 if level >= 4 else 1
 
 	knockback_amount = 100
 	speed = 100.0
-	attack_size = 1.0 * (1 + player.spell_size)
 
 func _animate_size() -> void:
 	var tw = create_tween()
 	tw.tween_property(self, "scale", Vector2.ONE * attack_size, 1.0) \
-	  .set_trans(Tween.TRANS_QUINT) \
-	  .set_ease(Tween.EASE_OUT)
+		.set_trans(Tween.TRANS_QUINT) \
+		.set_ease(Tween.EASE_OUT)
 	tw.play()
