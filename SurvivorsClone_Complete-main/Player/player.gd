@@ -1252,6 +1252,23 @@ func upgrade_character(upgrade):
 				#print("💀 [CORPSE DEBUG] Upgraded to corpse_rain4, corpse_rain_level=", corpse_rain_level, ", baseammo=", corpse_rain_baseammo, ", attackspeed=", corpse_rain_attackspeed, ", damage=", corpse_rain_damage, ", CorpseRainTimer started, running=", !CorpseRainTimer.is_stopped())
 			else:
 				push_error("CorpseRainTimer or CorpseRainAttackTimer is null for corpse_rain4")
+		"power_chord1", "power_chord2", "power_chord3", "power_chord4", "power_chord5":
+			damage_multiplier += 0.10
+		"shred_drive1", "shred_drive2", "shred_drive3", "shred_drive4", "shred_drive5":
+			projectile_speed_multiplier += 0.10
+		"resonance_pedal1", "resonance_pedal2", "resonance_pedal3", "resonance_pedal4", "resonance_pedal5":
+			effect_duration_multiplier += 0.10
+		"stage_magnet1", "stage_magnet2", "stage_magnet3", "stage_magnet4", "stage_magnet5":
+			pickup_radius_bonus += 0.10
+			if has_node("PickupArea/CollisionShape2D"):
+				var shape := $PickupArea/CollisionShape2D.shape
+				if shape is CircleShape2D:
+					shape.radius *= (1.0 + pickup_radius_bonus)
+		"blood_oath1", "blood_oath2", "blood_oath3", "blood_oath4", "blood_oath5":
+			hp_regen_per_sec += 0.2
+		"iron_will1", "iron_will2", "iron_will3", "iron_will4", "iron_will5":
+			maxhp = int(round(maxhp * 1.2))
+			hp = min(hp, maxhp)
 		"armor1", "armor2", "armor3", "armor4":
 			armor += 1
 		"speed1", "speed2", "speed3", "speed4":
