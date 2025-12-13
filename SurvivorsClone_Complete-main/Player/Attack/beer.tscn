@@ -1,36 +1,42 @@
 [gd_scene load_steps=6 format=3 uid="uid://8hrrpgsdxp5u"]
 
-[ext_resource type="Script" uid="uid://b6g6ctdnqw3cj" path="res://Player/Attack/beer.gd" id="1_gqgd0"]
+[ext_resource type="Script" uid="uid://b6g6ctdnqw3cj" path="res://Player/Attack/beer.gd" id="1_beer"]
 [ext_resource type="Texture2D" uid="uid://24gjuadofjw7" path="res://Textures/Items/Weapons/beer1.png" id="2_beer1"]
-[ext_resource type="Texture2D" uid="uid://bbj8l5yqxd2x8" path="res://Textures/Items/Weapons/beer2.png" id="3_tbdui"]
-[ext_resource type="AudioStream" uid="uid://d3l2f38n37xi5" path="res://Audio/SoundEffect/break.mp3" id="4_break_sound"]
+[ext_resource type="Texture2D" uid="uid://bbj8l5yqxd2x8" path="res://Textures/Items/Weapons/beer2.png" id="3_beer2"]
+[ext_resource type="AudioStream" uid="uid://d3l2f38n37xi5" path="res://Audio/SoundEffect/break.mp3" id="4_break"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_beer_hitbox"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_Beer"]
 size = Vector2(12, 36)
+
 
 [node name="Beer" type="Area2D" groups=["attack"]]
 top_level = true
 collision_layer = 0
 collision_mask = 10
-script = ExtResource("1_gqgd0")
+script = ExtResource("1_beer")
 beer_sprite = ExtResource("2_beer1")
-broken_sprite = ExtResource("3_tbdui")
+broken_sprite = ExtResource("3_beer2")
+
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, 3.8147e-06)
 scale = Vector2(0.051, 0.07225)
 texture = ExtResource("2_beer1")
 
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_beer_hitbox")
+shape = SubResource("RectangleShape2D_Beer")
+
 
 [node name="snd_break" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_break_sound")
+stream = ExtResource("4_break")
 volume_db = -15.0
+
 
 [node name="BreakTimer" type="Timer" parent="."]
 wait_time = 0.3
 one_shot = true
+autostart = false
+
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="timeout" from="BreakTimer" to="." method="_on_break_timer_timeout"]
