@@ -1,48 +1,108 @@
-extends Area2D
+extends Node2D
 
-@export var level: int = 1
-@export var damage: int = 2
-@export var speed: float = 150.0
-@export var pierce_count: int = 0
-@export var camera_path: NodePath
+# ==================================================
+# BASE STATS (PER LEVEL)
+# ==================================================
+var level: int = 1
+var damage: int = 3
+var tick_speed: float = 0.8
+var radius: float = 90.0
+var duration: float = 3.0
 
-var hits: int = 0
-var cam: Camera2D = null
-var viewport_size: Vector2 = Vector2.ZERO
+# ==================================================
+# PASSIVE-SCALED (CACHED)
+# ==================================================
+var final_damage: int
+var final_tick_speed: float
+var final_duration: float
 
-func _ready() -> void:
-	set_physics_process(true)
-	if camera_path and has_node(camera_path):
-		cam = get_node(camera_path) as Camera2D
-	else:
-		cam = get_viewport().get_camera_2d()
-	viewport_size = get_viewport_rect().size
-	var cb = Callable(self, "_on_body_entered")
-	if not is_connected("body_entered", cb):
-		connect("body_entered", cb)
-	rotation = deg_to_rad(135)  # Face North West
-	print("🔊 [BASS DEBUG] Bass initialized, level=", level, ", damage=", damage, ", speed=", speed, ", pierce_count=", pierce_count, ", camera_path=", camera_path, ", cam=", cam)
+# ==================================================
+# COMBAT
+# ==================================================
+var enemies_in_range: Array = []
 
-func _physics_process(delta: float) -> void:
-	position += Vector2(-1, -1).normalized() * speed * delta
-	print("🔊 [BASS DEBUG] Bass moving, position=", global_position, ", speed=", speed, ", delta=", delta)
-	if cam:
-		var half = viewport_size * 0.5 * cam.zoom
-		var center = cam.global_position
-		var bounds = Rect2(center - half, half * 2)
-		if not bounds.has_point(global_position):
-			queue_free()
-			print("🔊 [BASS DEBUG] Bass out of bounds, queue_free called, position=", global_position, ", bounds=", bounds)
+# ==================================================
+# NODES
+# ==================================================
+@onready var area_2d: Area2D = $Area2D
+@onready var collision_shape: CollisionShape2D = $Area2D/CollisionShape2D
+@onready var damage_timer: Timer = $DamageTimer
+@onready var sprite: Sprite2D = $BassSprite
+@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
+@onready var player = get_tree().get_first_node_in_group("player")
 
-func _on_body_entered(body: Node) -> void:
-	print("🔊 [BASS DEBUG] Bass collided with ", body, ", body groups=", body.get_groups())
-	if body.is_in_group("enemy") and body.has_method("_on_hurt_box_hurt"):
-		body._on_hurt_box_hurt(damage, Vector2(-1, -1).normalized(), 0)
-		hits += 1
-		print("🔊 [BASS DEBUG] Hit enemy, damage=", damage, ", hits=", hits, ", pierce_count=", pierce_count)
-		if hits > pierce_count:
-			queue_free()
-			print("🔊 [BASS DEBUG] Bass exceeded pierce_count, queue_free called")
-	elif body.is_in_group("wall"):
+# ==================================================
+# READY
+# ==================================================
+func _ready():
+	if player == null:
 		queue_free()
-		print("🔊 [BASS DEBUG] Hit wall, queue_free called")
+		return
+
+	update_stats()
+
+	# ─── APPLY PASSIVES ────────────────────────────
+	final_damage = int(round(damage * player.damage_multiplier))
+	final_tick_speed = tick_speed / max(player.projectile_speed_multiplier, 0.01)
+	final_duration = duration * player.effect_duration_multiplier
+
+	# Tome (size)
+	if collision_shape.shape is CircleShape2D:
+		collision_shape.shape.radius = radius * (1.0 + player.spell_size)
+
+	# Timers
+	damage_timer.wait_time = final_tick_speed
+	damage_timer.start()
+
+	# Lifetime
+	get_tree().create_timer(final_duration).timeout.connect(queue_free)
+
+	# Visuals / sound
+	if audio_player:
+		audio_player.play()
+
+# ==================================================
+# DAMAGE
+# ==================================================
+func _on_DamageTimer_timeout():
+	for enemy in enemies_in_range:
+		if enemy and enemy.has_method("_on_hurt_box_hurt"):
+			var dir = (enemy.global_position - global_position).normalized()
+			enemy._on_hurt_box_hurt(final_damage, dir, 0)
+
+# ==================================================
+# AREA TRACKING
+# ==================================================
+func _on_body_entered(body):
+	if body.is_in_group("enemy"):
+		enemies_in_range.append(body)
+
+func _on_body_exited(body):
+	if body.is_in_group("enemy"):
+		enemies_in_range.erase(body)
+
+# ==================================================
+# LEVEL SCALING (KEEP YOUR BALANCE)
+# ==================================================
+func update_stats():
+	match level:
+		1:
+			damage = 3
+			tick_speed = 0.8
+			radius = 90.0
+			duration = 3.0
+		2:
+			damage = 4
+			tick_speed = 0.7
+			radius = 110.0
+			duration = 3.5
+		3:
+			damage = 5
+			tick_speed = 0.6
+			radius = 130.0
+			duration = 4.0
+		4:
+			damage = 6
+			tick_speed = 0.5
+			radius = 150.0
+			duration = 4.5
