@@ -1734,7 +1734,7 @@ func _on_BassAttackTimer_timeout() -> void:
 func _on_AmpWaveTimer_timeout() -> void:
 	if amp_wave_level == 0:
 		return
-	amp_wave_ammo = amp_wave_baseammo + additional_attacks
+	amp_wave_ammo = amp_wave_baseammo  # No additional_attacks - too OP
 	AmpWaveAttackTimer.start()
 
 
@@ -1752,7 +1752,7 @@ func _on_AmpWaveAttackTimer_timeout() -> void:
 			AmpWaveAttackTimer.stop()
 
 func _on_bomb_banger_timer_timeout() -> void:
-	bomb_banger_ammo = bomb_banger_baseammo + additional_attacks
+	bomb_banger_ammo = bomb_banger_baseammo  # No additional_attacks - too OP
 	BombBangerAttackTimer.start()
 
 func _on_bomb_banger_attack_timer_timeout() -> void:

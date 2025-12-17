@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Objects/container_spawner.gd" id="1"]
+
+[node name="ContainerSpawner" type="Node2D" groups=["spawner"]]
+script = ExtResource("1")
+spawn_count = 50
+spawn_radius = 3000
+min_distance_between = 200
+respawn_time = 30.0

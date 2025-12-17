@@ -13,6 +13,7 @@ var speed: float = 200.0
 var targets: Array = []
 var direction: Vector2 = Vector2.ZERO
 var fired: bool = false
+var flights_remaining: int = 0  # Additional targeting flights from duration passive
 
 # Resources
 var spr_attack = preload("res://Textures/Items/Weapons/javelin.png")
@@ -32,6 +33,10 @@ func _ready() -> void:
 	var cb = Callable(self, "_on_body_entered")
 	if not is_connected("body_entered", cb):
 		connect("body_entered", cb)
+	
+	# Calculate extra flights from duration passive
+	if player:
+		flights_remaining = int(floor((player.effect_duration_multiplier - 1.0) * 10))
 
 	# Configure the timer to repeat
 	attack_timer.one_shot = false
@@ -51,6 +56,13 @@ func _on_attack_timer_timeout() -> void:
 			paths = 3; damage = 7;  knockback_amount = 100
 		4:
 			paths = 3; damage = 9;  knockback_amount = 120
+	
+	# Apply passives
+	damage = int(round(damage * player.damage_multiplier))
+	speed *= player.projectile_speed_multiplier
+	
+	# Reset flights for new volley
+	flights_remaining = int(floor((player.effect_duration_multiplier - 1.0) * 10))
 
 	# Manual selection of closest `paths` enemies
 	var avail = get_tree().get_nodes_in_group("enemy").duplicate()
@@ -74,7 +86,14 @@ func _on_attack_timer_timeout() -> void:
 
 func _fire_next() -> void:
 	if targets.is_empty():
-		# done firing this volley → reset state
+		# Check if we have additional flights remaining
+		if flights_remaining > 0:
+			flights_remaining -= 1
+			# Acquire NEW targets for another flight
+			_acquire_new_targets()
+			return
+		
+		# No more flights - reset state
 		fired = false
 		collider.set_deferred("disabled", true)
 		sprite.texture = spr_normal
@@ -102,6 +121,27 @@ func _on_body_entered(body: Node) -> void:
 		sprite.texture = spr_normal
 		await get_tree().create_timer(0.1).timeout
 		_fire_next()
+
+func _acquire_new_targets() -> void:
+	# Same logic as _on_attack_timer_timeout but for mid-flight retargeting
+	var avail = get_tree().get_nodes_in_group("enemy").duplicate()
+	targets.clear()
+	for i in range(paths):
+		if avail.size() > 0:
+			var best_idx: int = 0
+			var best_dist: float = avail[0].global_position.distance_to(global_position)
+			for j in range(1, avail.size()):
+				var d: float = avail[j].global_position.distance_to(global_position)
+				if d < best_dist:
+					best_dist = d
+					best_idx = j
+			targets.append(avail[best_idx].global_position)
+			avail.remove_at(best_idx)
+		else:
+			# fallback if no enemies
+			targets.append(player.global_position)
+	
+	_fire_next()
 
 func _clamp_to_screen() -> void:
 	if not camera:

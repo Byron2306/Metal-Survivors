@@ -23,8 +23,21 @@ func _ready() -> void:
 	if level == 1:
 		max_bounces = 2
 	else:
-		max_bounces = 3
-
+		max_bounces = 3	
+	# Apply passives
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		# Damage scaling by level
+		match level:
+			1: damage = 2
+			2: damage = 3
+			3: damage = 4
+			4: damage = 5
+		
+		damage = int(round(damage * player.damage_multiplier))
+		speed *= player.projectile_speed_multiplier
+		# Duration adds MORE screen bounces
+		max_bounces += int(floor((player.effect_duration_multiplier - 1.0) * 10))
 	# Capture radius
 	if collision.shape is CircleShape2D:
 		shape_radius = collision.shape.radius

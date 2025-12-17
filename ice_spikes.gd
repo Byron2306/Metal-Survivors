@@ -31,6 +31,9 @@ func _ready() -> void:
 	circle.radius = zone_size
 	scale = Vector2(0.5, 0.5) * (zone_size / 30.0)
 	damage_tick_timer.wait_time = tick_speed
+	
+	# Apply duration multiplier to lifetime
+	lifetime_timer.wait_time = 5.0 * player.effect_duration_multiplier
 
 	if not damage_tick_timer.is_connected("timeout", Callable(self, "_on_damage_tick_timer_timeout")):
 		damage_tick_timer.connect("timeout", Callable(self, "_on_damage_tick_timer_timeout"))
@@ -61,7 +64,11 @@ func update_stats() -> void:
 			tick_speed = 0.4
 			base_size = 40.0
 
-	# apply spell_size bonus
+	# apply spell_size bonus (already applied above)
+	
+	# Apply passives
+	damage = int(round(damage * player.damage_multiplier))
+	tick_speed /= player.projectile_speed_multiplier  # Faster ticks
 	base_size *= (1 + player.spell_size)
 
 	# 2) Character-level shrink, but stop at base_size when char lvl >= 4

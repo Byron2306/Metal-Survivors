@@ -1,15 +1,51 @@
 extends CharacterBody2D
+# Defensive
+var armor: int = 0
 
-var movement_speed = 60.0
-var hp = 80
-var maxhp = 80
+# Mobility
+var movement_speed: float = 60.0
+
+# Damage scaling (Power Chord, etc.)
+var damage_multiplier: float = 1.0
+# Experience boost (additive multiplier)
+var xp_multiplier: float = 1.0
+
+# Spell modifiers
+var spell_size: float = 0.0        # Tome (+10% each)
+var spell_cooldown: float = 0.0    # Scroll (+5% each)
+
+# Multi-attack passive (Ring)
+var additional_attacks: int = 0
+var base_grab_radius: float = 0.0
+# Healing
+var hp: int = 80
+var maxhp: int = 80
 var last_movement = Vector2.UP
 var time = 0
 
-var experience = 0
-var experience_level = 1
-var collected_experience = 0
+var experience: int = 0
+var collected_experience: int = 0
+var experience_level: int = 1
 
+
+# ─────────────────────────────────────────────
+# PASSIVE / META MODIFIERS (GLOBAL)
+# ─────────────────────────────────────────────
+
+# Projectile & attack tempo
+var projectile_speed_multiplier: float = 1.0
+
+# Effect duration scaling (auras, ground effects, DOTs)
+var effect_duration_multiplier: float = 1.0
+
+# Pickup / magnet radius bonus (additive)
+var pickup_radius_bonus: float = 0.0
+
+# Health regeneration (per second)
+var hp_regen_per_sec: float = 0.0
+
+const BONE_SMASH_SCENE: PackedScene = preload("res://Player/Attack/bone_smash.tscn")
+const BOMB_BANGER_SCENE: PackedScene = preload("res://Player/Attack/bomb_banger.tscn")
 const AXE_EXTRA_DELAY : float = 0.1   # gap after each swing, tweak as needed
 const AXE_SPAWN_OFFSET : Vector2 = Vector2(0, -40)  # raise axe 40px above player
 # Attacks
@@ -28,8 +64,14 @@ var beer = preload("res://Player/Attack/beer.tscn")
 @export var bass_scene: PackedScene = preload("res://Player/Attack/bass.tscn")
 @export var amp_wave_scene: PackedScene = preload("res://Player/Attack/amp_wave.tscn")
 @export var corpse_rain_scene: PackedScene = preload("res://Player/Attack/corpse_rain.tscn")
+# NEW Attacks
+@export var bomb_banger_scene: PackedScene = preload("res://Player/Attack/bomb_banger.tscn")
+@export var bone_smash_scene: PackedScene  = preload("res://Player/Attack/bone_smash.tscn")
 
-# Attack Nodes
+@onready var BombBangerTimer = get_node_or_null("%BombBangerTimer")
+@onready var BombBangerAttackTimer = get_node_or_null("%BombBangerAttackTimer")
+@onready var BoneSmashTimer = get_node_or_null("%BoneSmashTimer")
+@onready var BoneSmashAttackTimer = get_node_or_null("%BoneSmashAttackTimer")
 @onready var iceSpearTimer = get_node("%IceSpearTimer")
 @onready var iceSpearAttackTimer = get_node("%IceSpearAttackTimer")
 @onready var tornadoTimer = get_node("%TornadoTimer")
@@ -55,6 +97,8 @@ var beer = preload("res://Player/Attack/beer.tscn")
 @onready var AmpWaveAttackTimer: Timer = $AmpWaveAttackTimer
 @onready var CorpseRainTimer: Timer = $CorpseRainTimer
 @onready var CorpseRainAttackTimer: Timer = $CorpseRainAttackTimer
+@onready var grab_area: Area2D = $GrabArea
+@onready var grab_collision: CollisionShape2D = $GrabArea/CollisionShape2D
 @onready var camera2d = get_node("Camera2D")
 
 # How many volleys we have queued
@@ -63,11 +107,7 @@ var razor_ammo: int = 0
 var collected_upgrades = []
 var upgrade_options = []
 var projectiles = []
-var armor = 0
 var speed = 0
-var spell_cooldown = 0
-var spell_size = 0
-var additional_attacks = 0
 
 var runeAxe_level: int = 0
 var runeAxe_slices: int = 0
@@ -148,6 +188,20 @@ var corpse_rain_baseammo: int = 5  # Always 5 sprites per volley
 var corpse_rain_attackspeed: float = 2.0
 var corpse_rain_damage: int = 2
 
+# Bomb Banger
+var bomb_banger_level: int = 0
+var bomb_banger_ammo: int = 0
+var bomb_banger_baseammo: int = 0
+var bomb_banger_attackspeed: float = 3.0  # cooldown between volleys
+
+# Bone Smash
+var bone_smash_level: int = 0
+var bone_smash_ammo: int = 0
+var bone_smash_baseammo: int = 0
+var bone_smash_attackspeed: float = 4.0   # cooldown between drops
+var bone_smash_damage: int = 8
+var bone_smash_speed: float = 600.0
+
 # Razor Picks
 var razor_level: int = 0
 var razor_picks_per_volley: int = 0
@@ -180,6 +234,9 @@ const RazorPickScene = preload("res://Player/Attack/razor_pick.tscn")
 signal playerdeath
 
 func _ready() -> void:
+	var shape := grab_collision.shape as CircleShape2D
+	if shape:
+		base_grab_radius = shape.radius
 	# Initialize all timers at the start to avoid conflicts
 	if iceSpearTimer:
 		iceSpearTimer.wait_time = icespear_attackspeed
@@ -271,7 +328,17 @@ func _ready() -> void:
 		#print("💀 [CORPSE DEBUG] CorpseRainAttackTimer initialized with wait_time=0.1, stopped=", CorpseRainAttackTimer.is_stopped())
 	else:
 		push_error("CorpseRainAttackTimer is null in _ready!")
-		
+	# --- NEW: ensure BombBanger & BoneSmash timers exist + are wired ---
+	BombBangerTimer = _ensure_timer(BombBangerTimer, "BombBangerTimer", bomb_banger_attackspeed, Callable(self, "_on_bomb_banger_timer_timeout"))
+	BombBangerAttackTimer = _ensure_timer(BombBangerAttackTimer, "BombBangerAttackTimer", 0.08, Callable(self, "_on_bomb_banger_attack_timer_timeout"))
+	BombBangerTimer.stop()
+	BombBangerAttackTimer.stop()
+
+	BoneSmashTimer = _ensure_timer(BoneSmashTimer, "BoneSmashTimer", bone_smash_attackspeed, Callable(self, "_on_bone_smash_timer_timeout"))
+	BoneSmashAttackTimer = _ensure_timer(BoneSmashAttackTimer, "BoneSmashAttackTimer", 0.10, Callable(self, "_on_bone_smash_attack_timer_timeout"))
+	BoneSmashTimer.stop()
+	BoneSmashAttackTimer.stop()
+
 	# Set up character based on Global.selected_character
 	if Global.selected_character:
 		sprite.texture = load(Global.selected_character)
@@ -304,6 +371,7 @@ func _ready() -> void:
 			sprite.hframes = 6
 			sprite.vframes = 1
 			upgrade_character("pentagram1")
+			upgrade_character("bone_smash1")
 			#print("Starting weapon for Doug: pentagram1")
 		elif Global.selected_character == "res://Textures/Player/jesse_sprite.png":
 			sprite.scale = Vector2(0.128, 0.134)
@@ -337,6 +405,7 @@ func _ready() -> void:
 			sprite.hframes = 6
 			sprite.vframes = 1
 			upgrade_character("corpse_rain1")
+			upgrade_character("bomb_banger1")
 			#print("Starting weapon for Kyle: corpse_rain1")
 		sprite.frame = clamp(sprite.frame, 0, sprite.hframes * sprite.vframes - 1)
 		#print("Player sprite set to:", Global.selected_character, "with scale:", sprite.scale, "position:", sprite.position, "hframes:", sprite.hframes, "vframes:", sprite.vframes)
@@ -428,6 +497,10 @@ func _physics_process(delta):
 	movement()
 	if camera2d:
 		camera2d.global_position = global_position
+	if hp_regen_per_sec > 0.0 and hp < maxhp:
+		hp += hp_regen_per_sec * delta
+		hp = min(hp, maxhp)
+		healthBar.value = hp
 
 
 func movement() -> void:
@@ -472,6 +545,23 @@ func attack():
 		spawn_javelin()
 	if metalSpike_level > 0:
 		spawn_metalSpike()
+	# --- Bomb Banger ---
+	if bomb_banger_level > 0 and BombBangerTimer:
+		BombBangerTimer.wait_time = bomb_banger_attackspeed * (1 - spell_cooldown)
+		if BombBangerTimer.is_stopped():
+			BombBangerTimer.start()
+	elif BombBangerTimer and BombBangerAttackTimer:
+		BombBangerTimer.stop()
+		BombBangerAttackTimer.stop()
+	# --- Bone Smash ---
+	if bone_smash_level > 0 and BoneSmashTimer:
+		BoneSmashTimer.wait_time = bone_smash_attackspeed * (1 - spell_cooldown)
+		if BoneSmashTimer.is_stopped():
+			BoneSmashTimer.start()
+	elif BoneSmashTimer and BoneSmashAttackTimer:
+		BoneSmashTimer.stop()
+		BoneSmashAttackTimer.stop()
+
 	if mosh_level > 0 and moshTimer:
 		moshTimer.wait_time = mosh_attackspeed * (1 - spell_cooldown)
 		if moshTimer.is_stopped():
@@ -553,6 +643,12 @@ func _on_hurt_box_hurt(damage, _angle, _knockback):
 	if hp <= 0:
 		death()
 
+func _update_pickup_radius() -> void:
+	var shape := grab_collision.shape as CircleShape2D
+	if not shape:
+		return
+	shape.radius = base_grab_radius + pickup_radius_bonus
+
 
 func _on_ice_spear_timer_timeout():
 	icespear_ammo = 1 + additional_attacks
@@ -623,6 +719,11 @@ func _on_ice_spikes_attack_timer_timeout():
 		else:
 			iceSpikesAttackTimer.stop()
 
+func _pick_enemy_pos_fallback() -> Vector2:
+	var enemies = get_tree().get_nodes_in_group("enemy")
+	if enemies.size() > 0:
+		return enemies.pick_random().global_position
+	return global_position + Vector2(0, 200)
 
 func _on_beer_timer_timeout():
 	beer_ammo += beer_baseammo + additional_attacks
@@ -828,9 +929,13 @@ func _on_collect_area_area_entered(area):
 		calculate_experience(gem_exp)
 
 
-func calculate_experience(gem_exp):
-	var exp_required = calculate_experiencecap()
-	collected_experience += gem_exp
+func calculate_experience(gem_exp: int) -> void:
+	# Apply XP multiplier
+	var boosted_exp: int = int(ceil(gem_exp * xp_multiplier))
+
+	var exp_required := calculate_experiencecap()
+	collected_experience += boosted_exp
+
 	if experience + collected_experience >= exp_required:
 		collected_experience -= exp_required - experience
 		experience_level += 1
@@ -840,21 +945,18 @@ func calculate_experience(gem_exp):
 	else:
 		experience += collected_experience
 		collected_experience = 0
-	
+
 	set_expbar(experience, exp_required)
 
-
-func calculate_experiencecap():
-	var exp_cap = experience_level
+func calculate_experiencecap() -> int:
+	var exp_cap: int = experience_level
 	if experience_level < 20:
 		exp_cap = experience_level * 5
 	elif experience_level < 40:
 		exp_cap = 95 + (experience_level - 19) * 8
 	else:
 		exp_cap = 255 + (experience_level - 39) * 12
-		
 	return exp_cap
-
 
 func set_expbar(set_value = 1, set_max_value = 100):
 	expBar.value = set_value
@@ -931,6 +1033,51 @@ func upgrade_character(upgrade):
 		"metalSpike4":
 			metalSpike_level = 4
 			metalSpike_baseammo += 2
+		"bomb_banger1":
+			bomb_banger_level = 1
+			bomb_banger_baseammo = max(bomb_banger_baseammo, 1)
+			bomb_banger_attackspeed = 3.0
+			if BombBangerTimer: BombBangerTimer.start()
+		"bomb_banger2":
+			bomb_banger_level = 2
+			bomb_banger_attackspeed = 2.5
+			if BombBangerTimer: BombBangerTimer.start()
+		"bomb_banger3":
+			bomb_banger_level = 3
+			bomb_banger_attackspeed = 2.0
+			if BombBangerTimer: BombBangerTimer.start()
+		"bomb_banger4":
+			bomb_banger_level = 4
+			bomb_banger_attackspeed = 1.6
+			if BombBangerTimer: BombBangerTimer.start()
+		"bone_smash1":
+			bone_smash_level = 1
+			bone_smash_baseammo = max(bone_smash_baseammo, 1)
+			bone_smash_damage = 8
+			bone_smash_speed = 600.0
+			bone_smash_attackspeed = 4.0
+			if BoneSmashTimer: BoneSmashTimer.start()
+		"bone_smash2":
+			bone_smash_level = 2
+			bone_smash_baseammo = max(bone_smash_baseammo, 1)
+			bone_smash_damage = 10
+			bone_smash_speed = 650.0
+			bone_smash_attackspeed = 3.5
+			if BoneSmashTimer: BoneSmashTimer.start()
+		"bone_smash3":
+			bone_smash_level = 3
+			bone_smash_baseammo = max(bone_smash_baseammo, 2)
+			bone_smash_damage = 12
+			bone_smash_speed = 700.0
+			bone_smash_attackspeed = 3.0
+			if BoneSmashTimer: BoneSmashTimer.start()
+		"bone_smash4":
+			bone_smash_level = 4
+			bone_smash_baseammo = max(bone_smash_baseammo, 3)
+			bone_smash_damage = 14
+			bone_smash_speed = 750.0
+			bone_smash_attackspeed = 2.6
+			if BoneSmashTimer: BoneSmashTimer.start()
 		"mosh1":
 			mosh_level = 1
 			mosh_baseammo += 1
@@ -1259,13 +1406,12 @@ func upgrade_character(upgrade):
 		"resonance_pedal1", "resonance_pedal2", "resonance_pedal3", "resonance_pedal4", "resonance_pedal5":
 			effect_duration_multiplier += 0.10
 		"stage_magnet1", "stage_magnet2", "stage_magnet3", "stage_magnet4", "stage_magnet5":
-			pickup_radius_bonus += 0.10
-			if has_node("PickupArea/CollisionShape2D"):
-				var shape := $PickupArea/CollisionShape2D.shape
-				if shape is CircleShape2D:
-					shape.radius *= (1.0 + pickup_radius_bonus)
+			pickup_radius_bonus += 20.0
+			_update_pickup_radius()
 		"blood_oath1", "blood_oath2", "blood_oath3", "blood_oath4", "blood_oath5":
 			hp_regen_per_sec += 0.2
+		"xp_booster1", "xp_booster2", "xp_booster3", "xp_booster4", "xp_booster5":
+			xp_multiplier += 0.10
 		"iron_will1", "iron_will2", "iron_will3", "iron_will4", "iron_will5":
 			maxhp = int(round(maxhp * 1.2))
 			hp = min(hp, maxhp)
@@ -1588,7 +1734,7 @@ func _on_BassAttackTimer_timeout() -> void:
 func _on_AmpWaveTimer_timeout() -> void:
 	if amp_wave_level == 0:
 		return
-	amp_wave_ammo = amp_wave_baseammo + additional_attacks
+	amp_wave_ammo = amp_wave_baseammo  # No additional_attacks - too OP
 	AmpWaveAttackTimer.start()
 
 
@@ -1604,6 +1750,46 @@ func _on_AmpWaveAttackTimer_timeout() -> void:
 			AmpWaveAttackTimer.start()
 		else:
 			AmpWaveAttackTimer.stop()
+
+func _on_bomb_banger_timer_timeout() -> void:
+	bomb_banger_ammo = bomb_banger_baseammo  # No additional_attacks - too OP
+	BombBangerAttackTimer.start()
+
+func _on_bomb_banger_attack_timer_timeout() -> void:
+	if bomb_banger_ammo <= 0:
+		BombBangerAttackTimer.stop()
+		return
+
+	var bomb = bomb_banger_scene.instantiate()
+	bomb.global_position = global_position
+	bomb.level = bomb_banger_level
+	get_parent().add_child(bomb)
+
+	bomb_banger_ammo -= 1
+
+# Bone Smash
+# -------------------------
+func _on_bone_smash_timer_timeout() -> void:
+	bone_smash_ammo = bone_smash_baseammo + additional_attacks
+	BoneSmashAttackTimer.start()
+
+func _on_bone_smash_attack_timer_timeout() -> void:
+	if bone_smash_ammo <= 0:
+		BoneSmashAttackTimer.stop()
+		return
+
+	var target = _pick_enemy_pos_fallback()
+
+	var smash = bone_smash_scene.instantiate()
+	# bone_smash moves DOWN only: spawn above the target
+	smash.global_position = Vector2(target.x, target.y - 420.0)
+	smash.target_position = target
+	smash.level = bone_smash_level
+	smash.damage = bone_smash_damage
+	smash.speed = bone_smash_speed
+	get_parent().add_child(smash)
+
+	bone_smash_ammo -= 1
 
 func _on_CorpseRainTimer_timeout() -> void:
 	if corpse_rain_level == 0:
@@ -1638,3 +1824,17 @@ func _on_CorpseRainAttackTimer_timeout() -> void:
 	else:
 		CorpseRainAttackTimer.stop()
 		#print("💀 [CORPSE DEBUG] CorpseRainAttackTimer timeout, no ammo, stopping timer")
+func _ensure_timer(existing, name: String, wait_time: float, timeout_cb: Callable) -> Timer:
+	var t: Timer = existing
+	if t == null:
+		t = get_node_or_null(name) as Timer
+	if t == null:
+		t = Timer.new()
+		t.name = name
+		add_child(t)
+	t.one_shot = false
+	t.autostart = false
+	t.wait_time = wait_time
+	if not t.is_connected("timeout", timeout_cb):
+		t.connect("timeout", timeout_cb)
+	return t

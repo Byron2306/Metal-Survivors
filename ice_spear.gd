@@ -12,16 +12,23 @@ var knockback_amount: int = 100
 var attack_size: float = 1.0
 
 var move_direction: Vector2 = Vector2.ZERO
+var bounce_count: int = 0
+var max_bounces: int = 0
 
 @onready var player           = get_tree().get_first_node_in_group("player")
 @onready var sprite: AnimatedSprite2D   = $Sprite2D
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@ontml:parameter>
+<parameter name="collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var despawn_timer: Timer       = $Timer
 
 func _ready() -> void:
 	_set_stats()
 	sprite.scale = Vector2.ONE * attack_size
 	_animate_size()
+	
+	# Calculate max bounces from duration passive
+	if player:
+		max_bounces = int(floor((player.effect_duration_multiplier - 1.0) * 10))
 
 	# Connect signals once
 	var body_c = Callable(self, "_on_body_entered")
@@ -89,13 +96,33 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("enemy") and body.has_method("_on_hurt_box_hurt"):
 		var ang = global_position.direction_to(body.global_position)
 		body._on_hurt_box_hurt(damage, ang, knockback_amount)
-		collision_shape.set_deferred("disabled", true)
+		
 		if level < 4:
-			queue_free()
+			# No pierce - check for bounce
+			if bounce_count < max_bounces:
+				bounce_count += 1
+				# Random new direction
+				var random_angle = randf_range(0, TAU)
+				move_direction = Vector2(cos(random_angle), sin(random_angle))
+				rotation = move_direction.angle() + deg_to_rad(135)
+				collision_shape.set_deferred("disabled", false)
+			else:
+				collision_shape.set_deferred("disabled", true)
+				queue_free()
 		else:
+			# Level 4 has pierce
 			hp -= 1
 			if hp <= 0:
-				queue_free()
+				# Pierce exhausted - check for bounce
+				if bounce_count < max_bounces:
+					bounce_count += 1
+					hp = 2  # Reset pierce
+					var random_angle = randf_range(0, TAU)
+					move_direction = Vector2(cos(random_angle), sin(random_angle))
+					rotation = move_direction.angle() + deg_to_rad(135)
+				else:
+					collision_shape.set_deferred("disabled", true)
+					queue_free()
 
 func _on_timer_timeout() -> void:
 	queue_free()
@@ -119,7 +146,13 @@ func _set_stats() -> void:
 
 	knockback_amount = 100
 	speed = 100.0
-	attack_size = 1.0 * (1 + player.spell_size)
+	attack_size = 1.0
+	
+	# Apply all passive multipliers
+	if player:
+		damage = int(round(damage * player.damage_multiplier))
+		speed *= player.projectile_speed_multiplier
+		attack_size *= (1.0 + player.spell_size)
 
 func _animate_size() -> void:
 	var tw = create_tween()

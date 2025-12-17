@@ -13,6 +13,9 @@ var sprite_size_scale: float = 1.0  # Modified by level
 var viewport_rect: Rect2
 var is_bouncing: bool = false
 var enemies_in_range: Array = []
+var bounce_count: int = 0
+var max_bounces: int = 0
+var hit_enemies: Array = []  # Track to prevent multi-hit before bounce
 var base_scales: Dictionary = {
 	"head": Vector2(0.12, 0.18),
 	"arm": Vector2(0.11, 0.12),
@@ -68,7 +71,14 @@ func _ready() -> void:
 	# Update stats based on level
 	update_stats()
 	
-	print("💀 [CORPSE DEBUG] CorpseRain initialized, type=", sprite_type, ", level=", level, ", damage=", damage, ", position=", global_position, ", scale=", sprite_nodes[sprite_type].scale)
+	# Calculate max bounces from duration
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		max_bounces = int(floor((player.effect_duration_multiplier - 1.0) * 10))
+	
+	# Connect collision signals
+	if not is_connected("body_entered", Callable(self, "_on_body_entered")):
+		connect("body_entered", Callable(self, "_on_body_entered"))
 
 func update_stats() -> void:
 	# Update damage and size based on level
@@ -85,6 +95,14 @@ func update_stats() -> void:
 		4:
 			damage = 8
 			sprite_size_scale = 1.3
+	
+	# Apply passives
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		damage = int(round(damage * player.damage_multiplier))
+		sprite_size_scale *= (1.0 + player.spell_size)
+		fall_speed *= player.projectile_speed_multiplier
+		rotation_speed *= player.projectile_speed_multiplier
 	
 	# Apply size scale to each sprite's base scale
 	var sprite_nodes = {
@@ -108,44 +126,54 @@ func update_stats() -> void:
 	print("💀 [CORPSE DEBUG] Updated stats, type=", sprite_type, ", level=", level, ", damage=", damage, ", sprite_size_scale=", sprite_size_scale, ", sprite_scale=", sprite_nodes[sprite_type].scale)
 
 func _physics_process(delta: float) -> void:
+	# Apply gravity when falling
+	if not is_bouncing:
+		velocity.y += 400 * delta  # Gravity
+	
 	# Move
 	global_position += velocity * delta
 	
 	# Rotate
 	rotation += rotation_speed * delta
 	
-	# Check if off-screen (bottom)
-	if global_position.y > viewport_rect.position.y + viewport_rect.size.y + 50:
-		queue_free()
-		print("💀 [CORPSE DEBUG] CorpseRain despawned, type=", sprite_type, ", off-screen at position=", global_position)
+	# Ground bounce check
+	var camera = get_tree().get_first_node_in_group("player_camera")
+	var viewport_bottom = viewport_rect.position.y + viewport_rect.size.y
+	if camera:
+		viewport_bottom = camera.global_position.y + 360
+	
+	if global_position.y >= viewport_bottom:
+		if bounce_count < max_bounces:
+			bounce_count += 1
+			velocity.y = -abs(velocity.y) * 0.6  # Bounce upward
+			velocity.x = randf_range(-100, 100)  # Random horizontal
+			is_bouncing = true
+			hit_enemies.clear()  # Allow re-hitting after bounce
+		else:
+			queue_free()
 
 func _on_body_entered(body: Node) -> void:
-	print("💀 [CORPSE DEBUG] CorpseRain collided with ", body.name, ", body groups=", body.get_groups())
 	if body.is_in_group("enemy") and body.has_method("_on_hurt_box_hurt"):
-		# Add to enemies_in_range for tracking
-		if not enemies_in_range.has(body):
-			enemies_in_range.append(body)
-			print("💀 [CORPSE DEBUG] Added enemy to range: ", body.name, ", total in range: ", enemies_in_range.size())
+		# Prevent double-hitting same enemy before bounce
+		if hit_enemies.find(body) != -1:
+			return
 		
-		# Apply damage
-		body._on_hurt_box_hurt(damage, Vector2.ZERO, 0.0)  # No knockback
-		print("💀 [CORPSE DEBUG] CorpseRain hit enemy, type=", sprite_type, ", enemy=", body.name, ", damage=", damage, ", hits_remaining=", hits_remaining - 1)
+		var angle = global_position.direction_to(body.global_position)
+		body._on_hurt_box_hurt(damage, angle, 0)
+		hit_enemies.append(body)
 		
-		hits_remaining -= 1
-		if hits_remaining <= 0:
-			queue_free()
-			print("💀 [CORPSE DEBUG] CorpseRain despawned, type=", sprite_type, ", after hitting second enemy")
+		# Enemy bounce
+		if bounce_count < max_bounces:
+			bounce_count += 1
+			# Bounce away from enemy with upward component
+			velocity = -angle * bounce_speed
+			velocity.y = -abs(velocity.y)  # Ensure upward
+			velocity.x += randf_range(-50, 50)  # Add randomness
+			is_bouncing = true
+			hit_enemies.clear()  # Allow re-hitting after this bounce
 		else:
-			# Bounce: Reverse y-velocity, reduce speed
-			if not is_bouncing:
-				velocity = Vector2(0, -bounce_speed)
-				is_bouncing = true
-				print("💀 [CORPSE DEBUG] CorpseRain bounced, type=", sprite_type, ", new velocity=", velocity)
-	else:
-		print("💀 [CORPSE DEBUG] Body not in enemy group: ", body.name)
+			hits_remaining -= 1
+			if hits_remaining <= 0:
+				queue_free()
 
-func _on_body_exited(body: Node) -> void:
-	if body.is_in_group("enemy"):
-		if enemies_in_range.has(body):
-			enemies_in_range.erase(body)
-			print("💀 [CORPSE DEBUG] Removed enemy from range: ", body.name, ", total in range: ", enemies_in_range.size())
+

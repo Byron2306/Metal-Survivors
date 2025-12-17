@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://mfjjcckhx8i5" path="res://Textures/f9d9ccac-4691-4864-86a2-2b18ef260648.png" id="1_3rr8i"]
 [ext_resource type="PackedScene" uid="uid://dncgepmkc4jf4" path="res://World/player.tscn" id="2_hg5st"]
 [ext_resource type="PackedScene" uid="uid://ba2claihwes2y" path="res://Utility/enemy_spawner.tscn" id="3_61tta"]
+[ext_resource type="PackedScene" path="res://Objects/container_spawner.tscn" id="3_container"]
 [ext_resource type="AudioStream" uid="uid://mbtryyd72ukj" path="res://Audio/Music/doom3.WAV" id="7_2glk4"]
 [ext_resource type="PackedScene" uid="uid://x50kopmr70lm" path="res://Enemy/doom1.tscn" id="8_nqt5s"]
 [ext_resource type="Script" uid="uid://cu4uf4inyl6p3" path="res://Utility/spawn_info.gd" id="9_wsbuw"]
@@ -274,6 +275,8 @@ region_rect = Rect2(-8000, -8000, 80000, 8000)
 region_filter_clip_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("2_hg5st")]
+
+[node name="ContainerSpawner" parent="." instance=ExtResource("3_container")]
 
 [node name="Loot" type="Node2D" parent="." groups=["loot"]]
 

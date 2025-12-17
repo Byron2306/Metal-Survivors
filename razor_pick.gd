@@ -13,6 +13,8 @@ var direction: Vector2 = Vector2.ZERO
 var hits: int = 0
 var cam: Camera2D = null
 var viewport_size: Vector2 = Vector2.ZERO
+var bounce_count: int = 0
+var max_bounces: int = 0
 
 # Capture the designer-set base scale so we can apply it consistently
 @onready var sprite: Sprite2D = $Sprite2D
@@ -30,6 +32,11 @@ func _ready() -> void:
 		cam = get_viewport().get_camera_2d()
 
 	viewport_size = get_viewport_rect().size
+	
+	# Calculate max bounces from duration
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		max_bounces = int(floor((player.effect_duration_multiplier - 1.0) * 10))
 
 	# Connect collision signal
 	var cb = Callable(self, "_on_body_entered")
@@ -40,6 +47,14 @@ func initialize(dir: Vector2, pick_index: int = 0) -> void:
 	# — reset pierce counter & set movement —
 	direction = dir.normalized()
 	hits = 0
+	bounce_count = 0
+	
+	# Apply passives
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		damage = int(round(damage * player.damage_multiplier))
+		speed *= player.projectile_speed_multiplier
+	
 	# Rotate sprite so its pointy end (default pointing down) faces `direction`
 	sprite.rotation = direction.angle() - PI/2
 
@@ -71,8 +86,17 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("enemy") and body.has_method("_on_hurt_box_hurt"):
 		body._on_hurt_box_hurt(damage, direction, 0)
 		hits += 1
+		
+		# Bounce logic (separate from pierce)
 		if hits > pierce_count:
-			queue_free()
+			if bounce_count < max_bounces:
+				bounce_count += 1
+				hits = 0  # Reset pierce counter for next bounce
+				var random_angle = randf_range(0, TAU)
+				direction = Vector2(cos(random_angle), sin(random_angle))
+				sprite.rotation = direction.angle() - PI/2
+			else:
+				queue_free()
 	elif body.is_in_group("wall"):
 		queue_free()
 

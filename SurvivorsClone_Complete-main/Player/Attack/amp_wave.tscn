@@ -1,59 +1,221 @@
-[gd_scene load_steps=6 format=3 uid="uid://d1d75b6p7brti"]
+[gd_scene load_steps=48 format=3 uid="uid://d1d75b6p7brti"]
 
 [ext_resource type="Script" uid="uid://bd3cqqmq1wa1d" path="res://Player/Attack/amp_wave.gd" id="1_amp_wave"]
 [ext_resource type="Texture2D" uid="uid://cbey8q25dkf4n" path="res://Textures/Items/Weapons/amp.png" id="2_amp"]
-[ext_resource type="Texture2D" uid="uid://ui8svr8rc7nl" path="res://Textures/Items/Weapons/amp_wave.png" id="3_amp_wave"]
+[ext_resource type="Texture2D" uid="uid://cqqsp8c7p7etl" path="res://Textures/Items/Weapons/ampwave001.png" id="3_3s228"]
 [ext_resource type="AudioStream" uid="uid://dh2rmmqed1e3p" path="res://Audio/SoundEffect/phaser-feedback-1-29402 (1).mp3" id="4_audio"]
+[ext_resource type="Texture2D" uid="uid://b7lc84f4j4q0a" path="res://Textures/Items/Weapons/ampwave002.png" id="4_ugrkk"]
+[ext_resource type="Texture2D" uid="uid://dujnaamdlu2yd" path="res://Textures/Items/Weapons/ampwave003.png" id="5_3ot3s"]
+[ext_resource type="Texture2D" uid="uid://dq6doc0mp3ej7" path="res://Textures/Items/Weapons/ampwave004.png" id="6_2mpcf"]
+[ext_resource type="Texture2D" uid="uid://dml4symb8sd6g" path="res://Textures/Items/Weapons/ampwave005.png" id="7_ab86y"]
+[ext_resource type="Texture2D" uid="uid://b511t3p647e1p" path="res://Textures/Items/Weapons/ampwave006.png" id="8_1oomj"]
+[ext_resource type="Texture2D" uid="uid://ql7rj1jxxhbv" path="res://Textures/Items/Weapons/ampwave007.png" id="9_g4gc7"]
+[ext_resource type="Texture2D" uid="uid://cstaxerapt1dd" path="res://Textures/Items/Weapons/ampwave008.png" id="10_i5jwq"]
+[ext_resource type="Texture2D" uid="uid://bigbjtcxh5agn" path="res://Textures/Items/Weapons/ampwave009.png" id="11_jrmpa"]
+[ext_resource type="Texture2D" uid="uid://d34ps5uxoqlsf" path="res://Textures/Items/Weapons/ampwave010.png" id="12_peb1n"]
+[ext_resource type="Texture2D" uid="uid://dx6xcei1ecgf2" path="res://Textures/Items/Weapons/ampwave011.png" id="13_6dahb"]
+[ext_resource type="Texture2D" uid="uid://b5iuwgj5dajwh" path="res://Textures/Items/Weapons/ampwave012.png" id="14_ltr01"]
+[ext_resource type="Texture2D" uid="uid://can3tlhm6wtyi" path="res://Textures/Items/Weapons/ampwave013.png" id="15_llgsi"]
+[ext_resource type="Texture2D" uid="uid://b47mvmyp4qfee" path="res://Textures/Items/Weapons/ampwave014.png" id="16_x2rgm"]
+[ext_resource type="Texture2D" uid="uid://i1t72juoipli" path="res://Textures/Items/Weapons/ampwave015.png" id="17_dyo1x"]
+[ext_resource type="Texture2D" uid="uid://cfc166gn16b00" path="res://Textures/Items/Weapons/ampwave016.png" id="18_56w5y"]
+[ext_resource type="Texture2D" uid="uid://dgw4re2nlg4o5" path="res://Textures/Items/Weapons/ampwave017.png" id="19_g4i04"]
+[ext_resource type="Texture2D" uid="uid://dfspq6igdkc3o" path="res://Textures/Items/Weapons/ampwave018.png" id="20_lqtrv"]
+[ext_resource type="Texture2D" uid="uid://bgeembmnnkvgx" path="res://Textures/Items/Weapons/ampwave019.png" id="21_awolh"]
+[ext_resource type="Texture2D" uid="uid://mx476pk3nwd8" path="res://Textures/Items/Weapons/ampwave020.png" id="22_fjdu6"]
+[ext_resource type="Texture2D" uid="uid://bl645xyhk4vcq" path="res://Textures/Items/Weapons/ampwave021.png" id="23_e1jb0"]
+[ext_resource type="Texture2D" uid="uid://cxdyaf0hbrvxr" path="res://Textures/Items/Weapons/ampwave022.png" id="24_5m2bn"]
+[ext_resource type="Texture2D" uid="uid://b2ybpu8g4f1fu" path="res://Textures/Items/Weapons/ampwave023.png" id="25_51etd"]
+[ext_resource type="Texture2D" uid="uid://01yrcekavacy" path="res://Textures/Items/Weapons/ampwave024.png" id="26_ufffg"]
+[ext_resource type="Texture2D" uid="uid://fgkwnt8nxr3t" path="res://Textures/Items/Weapons/ampwave025.png" id="27_4rr0h"]
+[ext_resource type="Texture2D" uid="uid://nwuxn527avnp" path="res://Textures/Items/Weapons/ampwave026.png" id="28_hsvov"]
+[ext_resource type="Texture2D" uid="uid://85afb6oeejpd" path="res://Textures/Items/Weapons/ampwave027.png" id="29_w56li"]
+[ext_resource type="Texture2D" uid="uid://bdkxmit07y4eu" path="res://Textures/Items/Weapons/ampwave028.png" id="30_k7opt"]
+[ext_resource type="Texture2D" uid="uid://bvd571qndnsqk" path="res://Textures/Items/Weapons/ampwave029.png" id="31_7ufqq"]
+[ext_resource type="Texture2D" uid="uid://ct3f5ldnbvg1u" path="res://Textures/Items/Weapons/ampwave030.png" id="32_blolw"]
+[ext_resource type="Texture2D" uid="uid://t3eops28wgtx" path="res://Textures/Items/Weapons/ampwave031.png" id="33_ya68x"]
+[ext_resource type="Texture2D" uid="uid://c62rhfkchl8f5" path="res://Textures/Items/Weapons/ampwave032.png" id="34_y0vv5"]
+[ext_resource type="Texture2D" uid="uid://cr77bj6cljogy" path="res://Textures/Items/Weapons/ampwave033.png" id="35_d2le5"]
+[ext_resource type="Texture2D" uid="uid://dx6y5xv66vul0" path="res://Textures/Items/Weapons/ampwave034.png" id="36_f3vjj"]
+[ext_resource type="Texture2D" uid="uid://o4pop3kq6qt2" path="res://Textures/Items/Weapons/ampwave035.png" id="37_q3wsd"]
+[ext_resource type="Texture2D" uid="uid://bjjif83ldnpce" path="res://Textures/Items/Weapons/ampwave036.png" id="38_ix1co"]
+[ext_resource type="Texture2D" uid="uid://c2nomsqsrilve" path="res://Textures/Items/Weapons/ampwave037.png" id="39_mu6dg"]
+[ext_resource type="Texture2D" uid="uid://d14sgxjcx7cfv" path="res://Textures/Items/Weapons/ampwave038.png" id="40_6ltwa"]
+[ext_resource type="Texture2D" uid="uid://ct3uqnylcef5g" path="res://Textures/Items/Weapons/ampwave039.png" id="41_5foxk"]
+[ext_resource type="Texture2D" uid="uid://cbbvxsvhicsre" path="res://Textures/Items/Weapons/ampwave040.png" id="42_aepr6"]
+[ext_resource type="Texture2D" uid="uid://dfki3sw8yxchv" path="res://Textures/Items/Weapons/ampwave041.png" id="43_mcqxm"]
+[ext_resource type="Texture2D" uid="uid://ceiv457ylocx6" path="res://Textures/Items/Weapons/ampwave042.png" id="44_i82i6"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wr1sm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_3s228")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ugrkk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_3ot3s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_2mpcf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ab86y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_1oomj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_g4gc7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_i5jwq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_jrmpa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_peb1n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_6dahb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_ltr01")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_llgsi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_x2rgm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_dyo1x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_56w5y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_g4i04")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_lqtrv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_awolh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_fjdu6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_e1jb0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_5m2bn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_51etd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_ufffg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_4rr0h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_hsvov")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_w56li")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_k7opt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_7ufqq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_blolw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_ya68x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_y0vv5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_d2le5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_f3vjj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_q3wsd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_ix1co")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_mu6dg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_6ltwa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_5foxk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_aepr6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_mcqxm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_i82i6")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_Amp"]
 radius = 114.039
 
-
 [node name="AmpWave" type="Node2D" groups=["attack"]]
 script = ExtResource("1_amp_wave")
-
 
 [node name="AmpSprite" type="Sprite2D" parent="."]
 position = Vector2(40, 0)
 scale = Vector2(0.043, 0.04)
 texture = ExtResource("2_amp")
 
-
-[node name="AmpWaveSprite" type="Sprite2D" parent="."]
-position = Vector2(40, 0)
-texture = ExtResource("3_amp_wave")
-hframes = 42
-frame = 0
-visible = false
-
+[node name="AmpWaveSprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(37, -1.19209e-06)
+scale = Vector2(0.68, 0.753333)
+sprite_frames = SubResource("SpriteFrames_wr1sm")
+frame = 41
+frame_progress = 1.0
 
 [node name="AnimationTimer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
-autostart = false
-
 
 [node name="DamageTimer" type="Timer" parent="."]
-autostart = false
-
 
 [node name="Area2D" type="Area2D" parent="."]
-monitoring = true
-monitorable = true
 collision_layer = 4
 collision_mask = 2
 
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(40, 1)
+position = Vector2(39, 1)
 shape = SubResource("CircleShape2D_Amp")
-
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_audio")
 volume_db = -6.19
 autoplay = true
-
 
 [connection signal="timeout" from="AnimationTimer" to="." method="_on_AnimationTimer_timeout"]
 [connection signal="timeout" from="DamageTimer" to="." method="_on_damage_timer_timeout"]

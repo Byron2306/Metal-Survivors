@@ -5,46 +5,42 @@ const IceSpearScene: PackedScene = preload("res://Player/Attack/ice_spear.tscn")
 
 var spawn_extras: bool = true
 var level: int = 1
-var hp: int = 1
+var hp: int = 1             # pierce count
 var speed: float = 100.0
 var damage: int = 5
 var knockback_amount: int = 100
 var attack_size: float = 1.0
 
 var move_direction: Vector2 = Vector2.ZERO
-
-# ─── PASSIVE-SCALED (CACHED) ─────────────────────
-var final_damage: int
-var final_speed: float
+var bounce_count: int = 0
+var max_bounces: int = 0
 
 @onready var player           = get_tree().get_first_node_in_group("player")
 @onready var sprite: AnimatedSprite2D   = $Sprite2D
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@ontml:parameter>
+<parameter name="collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var despawn_timer: Timer       = $Timer
 
 func _ready() -> void:
 	_set_stats()
-
-	# ─── APPLY PASSIVES (ONCE) ─────────────────────
-	final_damage = int(round(damage * player.damage_multiplier))
-	final_speed = speed * player.projectile_speed_multiplier
-
-	attack_size = 1.0 * (1 + player.spell_size)
 	sprite.scale = Vector2.ONE * attack_size
 	_animate_size()
+	
+	# Calculate max bounces from duration passive
+	if player:
+		max_bounces = int(floor((player.effect_duration_multiplier - 1.0) * 10))
 
 	# Connect signals once
 	var body_c = Callable(self, "_on_body_entered")
 	if not is_connected("body_entered", body_c):
 		connect("body_entered", body_c)
-
 	var timer_c = Callable(self, "_on_timer_timeout")
 	if not despawn_timer.is_connected("timeout", timer_c):
 		despawn_timer.connect("timeout", timer_c)
 
 	var enemies: Array = get_tree().get_nodes_in_group("enemy")
 
-	# ─── MULTI-SPEAR (UNCHANGED) ───────────────────
+	# Multi‑spear for level > 1
 	if level > 1 and spawn_extras:
 		spawn_extras = false
 		var spears: Array = [self]
@@ -76,7 +72,7 @@ func _ready() -> void:
 			spear.rotation = dir.angle() + deg_to_rad(135)
 		return
 
-	# ─── SINGLE-SPEAR PATH ─────────────────────────
+	# Single‑spear path (level == 1)
 	if enemies.size() > 0:
 		var best = enemies[0]
 		var bestd: float = best.global_position.distance_to(global_position)
@@ -94,26 +90,45 @@ func _ready() -> void:
 	despawn_timer.start()
 
 func _physics_process(delta: float) -> void:
-	global_position += move_direction * final_speed * delta
+	global_position += move_direction * speed * delta
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("enemy") and body.has_method("_on_hurt_box_hurt"):
 		var ang = global_position.direction_to(body.global_position)
-		body._on_hurt_box_hurt(final_damage, ang, knockback_amount)
-		collision_shape.set_deferred("disabled", true)
-
+		body._on_hurt_box_hurt(damage, ang, knockback_amount)
+		
 		if level < 4:
-			queue_free()
+			# No pierce - check for bounce
+			if bounce_count < max_bounces:
+				bounce_count += 1
+				# Random new direction
+				var random_angle = randf_range(0, TAU)
+				move_direction = Vector2(cos(random_angle), sin(random_angle))
+				rotation = move_direction.angle() + deg_to_rad(135)
+				collision_shape.set_deferred("disabled", false)
+			else:
+				collision_shape.set_deferred("disabled", true)
+				queue_free()
 		else:
+			# Level 4 has pierce
 			hp -= 1
 			if hp <= 0:
-				queue_free()
+				# Pierce exhausted - check for bounce
+				if bounce_count < max_bounces:
+					bounce_count += 1
+					hp = 2  # Reset pierce
+					var random_angle = randf_range(0, TAU)
+					move_direction = Vector2(cos(random_angle), sin(random_angle))
+					rotation = move_direction.angle() + deg_to_rad(135)
+				else:
+					collision_shape.set_deferred("disabled", true)
+					queue_free()
 
 func _on_timer_timeout() -> void:
 	queue_free()
 
 func _set_stats() -> void:
-	# Damage scaling by level
+	# Damage now scales 2 → 3 → 4 → 5 at levels 1–4
 	if level == 1:
 		damage = 2
 	elif level == 2:
@@ -124,14 +139,24 @@ func _set_stats() -> void:
 		damage = 5
 
 	# Pierce only at level 4
-	hp = 2 if level >= 4 else 1
+	if level >= 4:
+		hp = 2
+	else:
+		hp = 1
 
 	knockback_amount = 100
 	speed = 100.0
+	attack_size = 1.0
+	
+	# Apply all passive multipliers
+	if player:
+		damage = int(round(damage * player.damage_multiplier))
+		speed *= player.projectile_speed_multiplier
+		attack_size *= (1.0 + player.spell_size)
 
 func _animate_size() -> void:
 	var tw = create_tween()
 	tw.tween_property(self, "scale", Vector2.ONE * attack_size, 1.0) \
-		.set_trans(Tween.TRANS_QUINT) \
-		.set_ease(Tween.EASE_OUT)
+	  .set_trans(Tween.TRANS_QUINT) \
+	  .set_ease(Tween.EASE_OUT)
 	tw.play()

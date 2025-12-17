@@ -12,6 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://bnv76nm5171dn" path="res://Audio/SoundEffect/Victory.wav" id="10_rwm3p"]
 [ext_resource type="AudioStream" uid="uid://ca6physj6mqei" path="res://Audio/SoundEffect/Lose.ogg" id="11_28kfi"]
 [ext_resource type="PackedScene" uid="uid://b7c7gsdx2rkjm" path="res://Utility/basic_button.tscn" id="12_i8esf"]
+[ext_resource type="PackedScene" path="res://Objects/gold_counter_ui.tscn" id="14_gold"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nffdp"]
 radius = 4.0
@@ -146,6 +147,12 @@ offset_right = 634.0
 offset_bottom = 22.0
 texture_under = ExtResource("4_pbpj5")
 texture_progress = ExtResource("5_22wml")
+
+[node name="GoldCounterUI" parent="GUILayer/GUI" instance=ExtResource("14_gold")]
+offset_left = 540.0
+offset_top = 24.0
+offset_right = 690.0
+offset_bottom = 64.0
 
 [node name="lbl_level" type="Label" parent="GUILayer/GUI/ExperienceBar"]
 unique_name_in_owner = true

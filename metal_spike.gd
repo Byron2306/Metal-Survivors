@@ -29,6 +29,12 @@ func _ready() -> void:
 			damage = 8; rotation_speed = 2.0; orbit_radius = 120.0
 		_:
 			damage = 4; rotation_speed = 1.0; orbit_radius = 100.0
+	
+	# Apply passives
+	damage = int(round(damage * player.damage_multiplier))
+	rotation_speed *= player.projectile_speed_multiplier
+	orbit_radius *= (1.0 + player.spell_size)
+	
 	knockback_amount = 100
 
 	# 3) Hook up collision once

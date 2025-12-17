@@ -64,6 +64,12 @@ func update_stats() -> void:
 			damage     = 2
 			tick_speed = 1.0
 			aura_size  = 50.0
+	
+	# Apply passives
+	if player:
+		damage = int(round(damage * player.damage_multiplier))
+		aura_size *= (1.0 + player.spell_size)
+		tick_speed /= player.projectile_speed_multiplier  # Faster ticks
 
 	collision_shape.shape.radius = aura_size
 	sprite.scale = Vector2(aura_size / 100.0, aura_size / 100.0)

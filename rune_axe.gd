@@ -23,6 +23,14 @@ func _ready() -> void:
 
 func start_swing(dir: int) -> void:
 	position = AXE_SPAWN_OFFSET
+	
+	# Apply passives
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		damage = int(round(damage * player.damage_multiplier))
+		sprite.scale *= (1.0 + player.spell_size)
+		swing_time /= player.projectile_speed_multiplier  # Faster swings
+	
 	var target_angle = PI/2 if dir == SwingDir.RIGHT else -PI/2
 
 	var tw = create_tween()

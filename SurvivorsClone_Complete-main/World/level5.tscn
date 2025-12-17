@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://mfjjcckhx8i5" path="res://Textures/f9d9ccac-4691-4864-86a2-2b18ef260648.png" id="1_1640t"]
 [ext_resource type="PackedScene" uid="uid://dncgepmkc4jf4" path="res://World/player.tscn" id="2_2tcw2"]
 [ext_resource type="PackedScene" uid="uid://ba2claihwes2y" path="res://Utility/enemy_spawner.tscn" id="3_dcneg"]
+[ext_resource type="PackedScene" path="res://Objects/container_spawner.tscn" id="3_container"]
 [ext_resource type="Script" uid="uid://cu4uf4inyl6p3" path="res://Utility/spawn_info.gd" id="4_sfmjd"]
 [ext_resource type="PackedScene" uid="uid://de66hxhs4hgke" path="res://Enemy/power1.tscn" id="5_1640t"]
 [ext_resource type="PackedScene" uid="uid://di7klcgvcpibe" path="res://Enemy/power2.tscn" id="6_2tcw2"]
@@ -274,6 +275,8 @@ region_rect = Rect2(-8000, -8000, 80000, 8000)
 region_filter_clip_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("2_2tcw2")]
+
+[node name="ContainerSpawner" parent="." instance=ExtResource("3_container")]
 
 [node name="EnemySpawner" parent="." instance=ExtResource("3_dcneg")]
 spawns = Array[Resource]([SubResource("Resource_bcr1u"), SubResource("Resource_cus64"), SubResource("Resource_2rhhc"), SubResource("Resource_a8nfs"), SubResource("Resource_5if66"), SubResource("Resource_d0hgj"), SubResource("Resource_m81qb"), SubResource("Resource_fpwuy"), SubResource("Resource_udhae"), SubResource("Resource_1aydu"), SubResource("Resource_gkuqt"), SubResource("Resource_312pw"), SubResource("Resource_dcchx"), SubResource("Resource_6iopg"), SubResource("Resource_ai5rd"), SubResource("Resource_jm0p1"), SubResource("Resource_iwi78"), SubResource("Resource_tpuh1"), SubResource("Resource_sp401"), SubResource("Resource_gxai1"), SubResource("Resource_erbhh"), SubResource("Resource_tg8m8"), SubResource("Resource_r8olj"), SubResource("Resource_x28u6"), SubResource("Resource_dr2l1"), SubResource("Resource_fqrg8")])

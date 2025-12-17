@@ -50,6 +50,11 @@ func _ready() -> void:
 			damage = 5
 		_:
 			damage = 2
+	
+	# Apply passives
+	damage = int(round(damage * player.damage_multiplier))
+	attack_size *= (1.0 + player.spell_size)
+	max_time_alive *= player.effect_duration_multiplier
 
 	# 3) Tier 4 gets +25% knockback
 	if level == 4:

@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dncgepmkc4jf4" path="res://World/player.tscn" id="2_owir0"]
 [ext_resource type="PackedScene" uid="uid://ba2claihwes2y" path="res://Utility/enemy_spawner.tscn" id="3_b02vf"]
+[ext_resource type="PackedScene" path="res://Objects/container_spawner.tscn" id="3_container"]
 [ext_resource type="PackedScene" uid="uid://hxpjirkti2te" path="res://Enemy/black1.tscn" id="4_uioi8"]
 [ext_resource type="PackedScene" uid="uid://cb3lsmuxmb86y" path="res://Enemy/black2.tscn" id="5_5juf0"]
 [ext_resource type="Script" uid="uid://cu4uf4inyl6p3" path="res://Utility/spawn_info.gd" id="5_b65df"]
@@ -265,6 +266,8 @@ metadata/_custom_type_script = "uid://cu4uf4inyl6p3"
 [node name="Player" parent="." instance=ExtResource("2_owir0")]
 
 [node name="Loot" type="Node2D" parent="." groups=["loot"]]
+
+[node name="ContainerSpawner" parent="." instance=ExtResource("3_container")]
 
 [node name="EnemySpawner2" parent="." instance=ExtResource("3_b02vf")]
 spawns = Array[Resource]([SubResource("Resource_bcr1u"), SubResource("Resource_cus64"), SubResource("Resource_2rhhc"), SubResource("Resource_a8nfs"), SubResource("Resource_5if66"), SubResource("Resource_d0hgj"), SubResource("Resource_m81qb"), SubResource("Resource_fpwuy"), SubResource("Resource_udhae"), SubResource("Resource_1aydu"), SubResource("Resource_gkuqt"), SubResource("Resource_312pw"), SubResource("Resource_dcchx"), SubResource("Resource_6iopg"), SubResource("Resource_ai5rd"), SubResource("Resource_jm0p1"), SubResource("Resource_iwi78"), SubResource("Resource_tpuh1"), SubResource("Resource_sp401"), SubResource("Resource_gxai1"), SubResource("Resource_erbhh"), SubResource("Resource_tg8m8"), SubResource("Resource_r8olj"), SubResource("Resource_x28u6"), SubResource("Resource_dr2l1"), SubResource("Resource_fqrg8")])
