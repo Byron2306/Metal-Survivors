@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://bh2v0226ws1yy"]
+
+[ext_resource type="Script" uid="uid://cywx1ierhps1d" path="res://Player/Attack/rune_axe.gd" id="1_kt0l1"]
+[ext_resource type="Texture2D" uid="uid://cy6iwquuvtci5" path="res://Textures/Items/Weapons/rune_axe.png" id="2_fvs50"]
+[ext_resource type="AudioStream" uid="uid://bt5lyaehjdwr7" path="res://Audio/SoundEffect/slice.mp3" id="3_g6ajd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g6ajd"]
+size = Vector2(38, 40)
+
+[node name="RuneAxe" type="Area2D" groups=["attack"]]
+z_index = 1
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_kt0l1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.10175, 0.126703)
+texture = ExtResource("2_fvs50")
+centered = false
+offset = Vector2(-250, -455)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -36)
+shape = SubResource("RectangleShape2D_g6ajd")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_g6ajd")
+volume_db = -3.714
+autoplay = true

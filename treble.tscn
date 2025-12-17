@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dx7i2ussc6fmk"]
+
+[ext_resource type="Script" uid="uid://brps3mbm3d6qn" path="res://Player/Attack/treble.gd" id="1_uxjh1"]
+[ext_resource type="Texture2D" uid="uid://bqxh36q43gah5" path="res://Textures/Items/Weapons/treble.png" id="2_u2n78"]
+[ext_resource type="AudioStream" uid="uid://ck7elqkid3wg6" path="res://Audio/SoundEffect/treble.mp3" id="3_8wr36"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8wr36"]
+radius = 5.38516
+
+[node name="Treble" type="Area2D" groups=["attack"]]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_uxjh1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.038, 0.031)
+texture = ExtResource("2_u2n78")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_8wr36")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_8wr36")
+autoplay = true
