@@ -56,7 +56,7 @@ var metalSpike = preload("res://Player/Attack/metal_spike.tscn")
 var mosh_projectile_scene = preload("res://Player/Attack/mosh_projectile.tscn")
 var pentagram = preload("res://Player/Attack/pentagram.tscn")
 var ice_spikes = preload("res://Player/Attack/ice_spikes.tscn")
-var beer = preload("res://Player/Attack/beer.tscn")
+@export var beer: PackedScene = preload("res://Player/Attack/beer.tscn")
 # Razor Picks projectile scene
 @export var razor_pick_scene: PackedScene = preload("res://Player/Attack/razor_pick.tscn")
 @export var runeAxe_scene: PackedScene = preload("res://Player/Attack/rune_axe.tscn")
@@ -725,6 +725,30 @@ func _pick_enemy_pos_fallback() -> Vector2:
 		return enemies.pick_random().global_position
 	return global_position + Vector2(0, 200)
 
+func _pick_enemy_pos_in_view_or_fallback() -> Vector2:
+	var enemies = get_tree().get_nodes_in_group("enemy")
+	if enemies.is_empty():
+		return _pick_enemy_pos_fallback()
+
+	var viewport := get_viewport()
+	var view_size: Vector2 = viewport.get_visible_rect().size if viewport else get_viewport_rect().size
+	var cam: Camera2D = camera2d if camera2d else (viewport.get_camera_2d() if viewport else null)
+	if cam:
+		var zoomed := view_size * cam.zoom
+		var half := zoomed * 0.5
+		var center := cam.global_position
+		var in_view: Array = []
+		for e in enemies:
+			if e == null:
+				continue
+			var p := e.global_position
+			if abs(p.x - center.x) <= half.x and abs(p.y - center.y) <= half.y:
+				in_view.append(e)
+		if in_view.size() > 0:
+			return in_view.pick_random().global_position
+
+	return enemies.pick_random().global_position
+
 func _on_beer_timer_timeout():
 	beer_ammo += beer_baseammo + additional_attacks
 	beerAttackTimer.start()
@@ -732,10 +756,10 @@ func _on_beer_timer_timeout():
 
 func _on_beer_attack_timer_timeout():
 	if beer_ammo > 0:
-		var beer_attack = beer.instantiate()
-		beer_attack.global_position = global_position + Vector2(0, -10)
-		beer_attack.level = beer_level
+		var beer_attack = beer.instantiate() as Area2D
 		get_parent().add_child(beer_attack)
+		beer_attack.set("level", beer_level)
+		beer_attack.global_position = global_position + Vector2(0, -10)
 		beer_ammo -= 1
 		if beer_ammo > 0:
 			beerAttackTimer.start()
@@ -1755,10 +1779,41 @@ func _on_bomb_banger_timer_timeout() -> void:
 	bomb_banger_ammo = bomb_banger_baseammo  # No additional_attacks - too OP
 	BombBangerAttackTimer.start()
 
+func _cap_bomb_bangers(max_allowed: int) -> void:
+	if max_allowed <= 0:
+		return
+	var bombs = get_tree().get_nodes_in_group("bomb_banger")
+	var active: Array = []
+	for b in bombs:
+		if b == null:
+			continue
+		var exploded = b.get("has_exploded")
+		if exploded == true:
+			continue
+		active.append(b)
+	if active.size() < max_allowed:
+		return
+	# Detonate the oldest one immediately.
+	var oldest = active[0]
+	var oldest_t = int(oldest.get("spawned_at_msec") if oldest.get("spawned_at_msec") != null else 0)
+	for b in active:
+		var t = b.get("spawned_at_msec")
+		var ti = int(t) if t != null else 0
+		if ti < oldest_t:
+			oldest = b
+			oldest_t = ti
+	if oldest and oldest.has_method("force_explode"):
+		oldest.force_explode()
+	elif oldest and oldest.has_method("_trigger_explosion"):
+		oldest.call("_trigger_explosion")
+
 func _on_bomb_banger_attack_timer_timeout() -> void:
 	if bomb_banger_ammo <= 0:
 		BombBangerAttackTimer.stop()
 		return
+
+	# Cap active bangers so they don't pile up off-enemy.
+	_cap_bomb_bangers(bomb_banger_baseammo)
 
 	var bomb = bomb_banger_scene.instantiate()
 	bomb.global_position = global_position
@@ -1778,11 +1833,18 @@ func _on_bone_smash_attack_timer_timeout() -> void:
 		BoneSmashAttackTimer.stop()
 		return
 
-	var target = _pick_enemy_pos_fallback()
+	var target = _pick_enemy_pos_in_view_or_fallback()
 
 	var smash = bone_smash_scene.instantiate()
-	# bone_smash moves DOWN only: spawn above the target
-	smash.global_position = Vector2(target.x, target.y - 420.0)
+	# bone_smash moves DOWN only: spawn above the target, but keep the spawn within the current viewport
+	var viewport := get_viewport()
+	var view_size: Vector2 = viewport.get_visible_rect().size if viewport else get_viewport_rect().size
+	var cam: Camera2D = camera2d if camera2d else (viewport.get_camera_2d() if viewport else null)
+	var top_y: float = target.y - 420.0
+	if cam:
+		var zoomed := view_size * cam.zoom
+		top_y = max(top_y, cam.global_position.y - zoomed.y * 0.5 + 10.0)
+	smash.global_position = Vector2(target.x, top_y)
 	smash.target_position = target
 	smash.level = bone_smash_level
 	smash.damage = bone_smash_damage

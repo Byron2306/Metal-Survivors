@@ -9,11 +9,14 @@ enum SwingDir { LEFT, RIGHT }
 @onready var sprite:    Sprite2D          = $Sprite2D
 @onready var col_shape: CollisionShape2D = $CollisionShape2D
 
+var _base_scale: Vector2 = Vector2.ONE
+
 # **Always** use a _pure_ vertical offset here.
 #  X must be zero, Y is how far up from the player's origin you want the blade.
 const AXE_SPAWN_OFFSET := Vector2(0, -40)
 
 func _ready() -> void:
+	_base_scale = scale
 	# 1) Enable the Area2D to detect bodies
 	monitoring = true
 	# 2) Make sure the CollisionShape2D is active
@@ -28,7 +31,7 @@ func start_swing(dir: int) -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		damage = int(round(damage * player.damage_multiplier))
-		sprite.scale *= (1.0 + player.spell_size)
+		scale = _base_scale * (1.0 + player.spell_size)
 		swing_time /= player.projectile_speed_multiplier  # Faster swings
 	
 	var target_angle = PI/2 if dir == SwingDir.RIGHT else -PI/2

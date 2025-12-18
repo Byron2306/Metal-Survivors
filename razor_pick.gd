@@ -16,6 +16,9 @@ var viewport_size: Vector2 = Vector2.ZERO
 var bounce_count: int = 0
 var max_bounces: int = 0
 
+var _base_speed: float = 0.0
+var _base_scale: Vector2 = Vector2.ONE
+
 # Capture the designer-set base scale so we can apply it consistently
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var initial_scale: Vector2 = sprite.scale
@@ -24,6 +27,8 @@ var max_bounces: int = 0
 func _ready() -> void:
 	# Enable movement
 	set_physics_process(true)
+	_base_speed = speed
+	_base_scale = scale
 
 	# Resolve camera via NodePath or fallback to viewport camera
 	if camera_path and has_node(camera_path):
@@ -37,6 +42,7 @@ func _ready() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		max_bounces = int(floor((player.effect_duration_multiplier - 1.0) * 10))
+		scale = _base_scale * (1.0 + player.spell_size)
 
 	# Connect collision signal
 	var cb = Callable(self, "_on_body_entered")
@@ -53,7 +59,7 @@ func initialize(dir: Vector2, pick_index: int = 0) -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		damage = int(round(damage * player.damage_multiplier))
-		speed *= player.projectile_speed_multiplier
+		speed = _base_speed * player.projectile_speed_multiplier
 	
 	# Rotate sprite so its pointy end (default pointing down) faces `direction`
 	sprite.rotation = direction.angle() - PI/2
@@ -87,8 +93,9 @@ func _on_body_entered(body: Node) -> void:
 		body._on_hurt_box_hurt(damage, direction, 0)
 		hits += 1
 		
-		# Bounce logic (separate from pierce)
+		# Check if we've exceeded pierce limit
 		if hits > pierce_count:
+			# Try to bounce if we have bounces left
 			if bounce_count < max_bounces:
 				bounce_count += 1
 				hits = 0  # Reset pierce counter for next bounce
@@ -96,6 +103,7 @@ func _on_body_entered(body: Node) -> void:
 				direction = Vector2(cos(random_angle), sin(random_angle))
 				sprite.rotation = direction.angle() - PI/2
 			else:
+				# No bounces left, remove projectile
 				queue_free()
 	elif body.is_in_group("wall"):
 		queue_free()

@@ -38,6 +38,8 @@ var final_duration: float
 @onready var area_2d = $Area2D
 @onready var player = get_tree().get_first_node_in_group("player")
 
+var _base_scale: Vector2 = Vector2.ONE
+
 # ==================================================
 # READY
 # ==================================================
@@ -45,6 +47,7 @@ func _ready():
 	if player == null:
 		queue_free()
 		return
+	_base_scale = scale
 
 	# Start with amp.png visible
 	amp_sprite.visible = true
@@ -58,8 +61,8 @@ func _ready():
 	# Power Chord (damage)
 	final_damage = int(round(damage * player.damage_multiplier))
 
-	# Tome (size)
-	aura_size *= (1.0 + player.spell_size)
+	# Tome (size) - apply via node scaling so sprite + collision scale together
+	scale = _base_scale * (1.0 + player.spell_size)
 
 	# Shred Drive (tick speed)
 	final_tick_speed = tick_speed / max(player.projectile_speed_multiplier, 0.01)
@@ -67,7 +70,7 @@ func _ready():
 	# Resonance Pedal (duration)
 	final_duration = (max_frames * animation_timer.wait_time) * player.effect_duration_multiplier
 
-	# Apply to collision + timers
+	# Apply to collision + timers (radius remains authored-by-level; node scale handles size)
 	area_2d.get_node("CollisionShape2D").shape.radius = aura_size
 	damage_timer.wait_time = final_tick_speed
 

@@ -17,11 +17,17 @@ const BASE_DURATION: float      = 1.4
 @onready var player = get_tree().get_first_node_in_group("player")
 
 var has_reached_target: bool = false
+var _base_scale: Vector2 = Vector2.ONE
 
 func _ready():
+	_base_scale = scale
 	# ─── Tome (size) ──────────────────────────────────────────────
-	collision_shape.shape.radius = BASE_RADIUS * (1 + player.spell_size)
-	smash_sprite.scale           = Vector2.ONE * (1 + player.spell_size)
+	if player:
+		scale = _base_scale * (1.0 + player.spell_size)
+	# Keep the authored collision radius; scaling handles growth.
+	var circle := collision_shape.shape as CircleShape2D
+	if circle:
+		circle.radius = BASE_RADIUS
 
 func _physics_process(delta: float) -> void:
 	if has_reached_target:

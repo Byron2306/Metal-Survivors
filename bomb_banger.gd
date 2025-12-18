@@ -12,6 +12,7 @@ var tick_rate: float
 
 var player
 var has_exploded: bool = false
+var spawned_at_msec: int = 0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D   = $CollisionShape2D
@@ -19,6 +20,9 @@ var has_exploded: bool = false
 @onready var audio_player: AudioStreamPlayer2D   = $AudioStreamPlayer2D
 
 func _ready() -> void:
+	spawned_at_msec = Time.get_ticks_msec()
+	add_to_group("bomb_banger")
+
 	# Fetch Player for passives
 	var players = get_tree().get_nodes_in_group("player")
 	if players.is_empty():
@@ -80,6 +84,11 @@ func _trigger_explosion() -> void:
 	audio_player.play()
 	# Begin ticking damage
 	damage_timer.start()
+
+func force_explode() -> void:
+	if has_exploded:
+		return
+	_trigger_explosion()
 
 func _on_DamageTimer_timeout() -> void:
 	# Deal tick damage during explosion window

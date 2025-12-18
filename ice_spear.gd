@@ -17,8 +17,7 @@ var max_bounces: int = 0
 
 @onready var player           = get_tree().get_first_node_in_group("player")
 @onready var sprite: AnimatedSprite2D   = $Sprite2D
-@ontml:parameter>
-<parameter name="collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var despawn_timer: Timer       = $Timer
 
 func _ready() -> void:
@@ -156,7 +155,5 @@ func _set_stats() -> void:
 
 func _animate_size() -> void:
 	var tw = create_tween()
-	tw.tween_property(self, "scale", Vector2.ONE * attack_size, 1.0) \
-	  .set_trans(Tween.TRANS_QUINT) \
-	  .set_ease(Tween.EASE_OUT)
+	tw.tween_property(self, "scale", Vector2.ONE * attack_size, 1.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
 	tw.play()

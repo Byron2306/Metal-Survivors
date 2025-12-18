@@ -7,18 +7,21 @@ extends Area2D
 @export var camera_path: NodePath
 
 var hits: int = 0
+var direction: Vector2 = Vector2.ZERO
 var cam: Camera2D = null
 var viewport_size: Vector2 = Vector2.ZERO
 var bounce_count: int = 0
 var max_bounces: int = 0
+var _base_scale: Vector2 = Vector2.ONE
 
 func _ready() -> void:
 	set_physics_process(true)
+	_base_scale = scale
 	if camera_path and has_node(camera_path):
 		cam = get_node(camera_path) as Camera2D
 	else:
 		cam = get_viewport().get_camera_2d()
-	viewport_size = get_viewport_rect().size
+	viewport_size = get_viewport().get_visible_rect().size if get_viewport() else get_viewport_rect().size
 	
 	# Apply passives
 	var player = get_tree().get_first_node_in_group("player")
@@ -26,16 +29,19 @@ func _ready() -> void:
 		damage = int(round(damage * player.damage_multiplier))
 		speed *= player.projectile_speed_multiplier
 		max_bounces = int(floor((player.effect_duration_multiplier - 1.0) * 10))
+		scale = _base_scale * (1.0 + player.spell_size)
 	
 	var cb = Callable(self, "_on_body_entered")
 	if not is_connected("body_entered", cb):
 		connect("body_entered", cb)
-	rotation = deg_to_rad(135)  # Face North West
+	direction = Vector2(-1, -1).normalized()
+	rotation = direction.angle()  # Face movement
 
 func _physics_process(delta: float) -> void:
-	position += Vector2(-1, -1).normalized() * speed * delta
+	position += direction * speed * delta
 	if cam:
-		var half = viewport_size * 0.5 * cam.zoom
+		viewport_size = get_viewport().get_visible_rect().size if get_viewport() else viewport_size
+		var half = (viewport_size * cam.zoom) * 0.5
 		var center = cam.global_position
 		var bounds = Rect2(center - half, half * 2)
 		if not bounds.has_point(global_position):
@@ -51,7 +57,8 @@ func _on_body_entered(body: Node) -> void:
 				bounce_count += 1
 				hits = 0  # Reset pierce
 				var random_angle = randf_range(0, TAU)
-				rotation = random_angle
+				direction = Vector2(cos(random_angle), sin(random_angle))
+				rotation = direction.angle()
 			else:
 				queue_free()
 	elif body.is_in_group("wall"):

@@ -8,6 +8,8 @@ var damage: int
 var knockback_amount: int
 var paths: int
 var speed: float = 200.0
+const BASE_SPEED: float = 200.0
+const LEASH_FRACTION: float = 0.60
 
 # Firing state
 var targets: Array = []
@@ -25,8 +27,8 @@ var spr_normal = preload("res://Textures/Items/Weapons/javelin.png")
 @onready var collider     = $CollisionShape2D
 @onready var attack_timer = $AttackTimer
 @onready var snd_attack   = $snd_attack
-@onready var camera       = get_tree().get_first_node_in_group("camera2d")
-@onready var viewport_size= get_viewport_rect().size
+@onready var camera2d: Camera2D = get_viewport().get_camera_2d()
+@onready var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 
 func _ready() -> void:
 	# Connect collision once
@@ -34,9 +36,11 @@ func _ready() -> void:
 	if not is_connected("body_entered", cb):
 		connect("body_entered", cb)
 	
-	# Calculate extra flights from duration passive
 	if player:
 		flights_remaining = int(floor((player.effect_duration_multiplier - 1.0) * 10))
+	else:
+		attack_timer.stop()
+		return
 
 	# Configure the timer to repeat
 	attack_timer.one_shot = false
@@ -45,6 +49,9 @@ func _ready() -> void:
 	# AttackTimer → _on_attack_timer_timeout is connected in the TSCN
 
 func _on_attack_timer_timeout() -> void:
+	if not player:
+		return
+
 	# Refresh upgrade stats
 	level = player.javelin_level
 	match level:
@@ -57,22 +64,23 @@ func _on_attack_timer_timeout() -> void:
 		4:
 			paths = 3; damage = 9;  knockback_amount = 120
 	
-	# Apply passives
+	# Apply passives (reset per volley so it doesn't multiply forever)
 	damage = int(round(damage * player.damage_multiplier))
-	speed *= player.projectile_speed_multiplier
+	speed = BASE_SPEED * player.projectile_speed_multiplier
 	
 	# Reset flights for new volley
 	flights_remaining = int(floor((player.effect_duration_multiplier - 1.0) * 10))
 
-	# Manual selection of closest `paths` enemies
-	var avail = get_tree().get_nodes_in_group("enemy").duplicate()
+	# Manual selection of closest `paths` enemies (anchored to player, and prefer in-view)
+	var avail: Array = get_tree().get_nodes_in_group("enemy").duplicate()
+	avail = _filter_targets_near_player(avail)
 	targets.clear()
 	for i in range(paths):
 		if avail.size() > 0:
 			var best_idx: int = 0
-			var best_dist: float = avail[0].global_position.distance_to(global_position)
+			var best_dist: float = avail[0].global_position.distance_to(player.global_position)
 			for j in range(1, avail.size()):
-				var d: float = avail[j].global_position.distance_to(global_position)
+				var d: float = avail[j].global_position.distance_to(player.global_position)
 				if d < best_dist:
 					best_dist = d
 					best_idx = j
@@ -109,6 +117,7 @@ func _fire_next() -> void:
 func _physics_process(delta: float) -> void:
 	if fired:
 		global_position += direction * speed * delta
+		_pull_back_if_too_far()
 		_clamp_to_screen()
 
 func _on_body_entered(body: Node) -> void:
@@ -124,14 +133,15 @@ func _on_body_entered(body: Node) -> void:
 
 func _acquire_new_targets() -> void:
 	# Same logic as _on_attack_timer_timeout but for mid-flight retargeting
-	var avail = get_tree().get_nodes_in_group("enemy").duplicate()
+	var avail: Array = get_tree().get_nodes_in_group("enemy").duplicate()
+	avail = _filter_targets_near_player(avail)
 	targets.clear()
 	for i in range(paths):
 		if avail.size() > 0:
 			var best_idx: int = 0
-			var best_dist: float = avail[0].global_position.distance_to(global_position)
+			var best_dist: float = avail[0].global_position.distance_to(player.global_position)
 			for j in range(1, avail.size()):
-				var d: float = avail[j].global_position.distance_to(global_position)
+				var d: float = avail[j].global_position.distance_to(player.global_position)
 				if d < best_dist:
 					best_dist = d
 					best_idx = j
@@ -144,9 +154,52 @@ func _acquire_new_targets() -> void:
 	_fire_next()
 
 func _clamp_to_screen() -> void:
-	if not camera:
+	if camera2d == null:
+		camera2d = get_viewport().get_camera_2d()
+	if camera2d == null:
 		return
-	var half = viewport_size * 0.5
-	var cp = camera.global_position
+	viewport_size = get_viewport().get_visible_rect().size
+	var view_size := viewport_size * camera2d.zoom
+	var half := view_size * 0.5
+	var cp := camera2d.global_position
 	global_position.x = clamp(global_position.x, cp.x - half.x, cp.x + half.x)
 	global_position.y = clamp(global_position.y, cp.y - half.y, cp.y + half.y)
+
+func _pull_back_if_too_far() -> void:
+	if not player:
+		return
+	var leash := _get_leash_distance()
+	if global_position.distance_to(player.global_position) > leash:
+		direction = (player.global_position - global_position).normalized()
+		rotation = direction.angle() + deg_to_rad(135)
+
+func _get_leash_distance() -> float:
+	if camera2d == null:
+		camera2d = get_viewport().get_camera_2d()
+	viewport_size = get_viewport().get_visible_rect().size
+	if camera2d:
+		var view_size := viewport_size * camera2d.zoom
+		return min(view_size.x, view_size.y) * LEASH_FRACTION
+	return 600.0
+
+func _filter_targets_near_player(all_enemies: Array) -> Array:
+	if not player:
+		return all_enemies
+	# Prefer enemies in the current camera view; fallback to all if none.
+	var in_view: Array = []
+	if camera2d == null:
+		camera2d = get_viewport().get_camera_2d()
+	if camera2d:
+		viewport_size = get_viewport().get_visible_rect().size
+		var view_size := viewport_size * camera2d.zoom
+		var half := view_size * 0.5
+		var cp := camera2d.global_position
+		for e in all_enemies:
+			if e == null:
+				continue
+			var p: Vector2 = e.global_position
+			if abs(p.x - cp.x) <= half.x and abs(p.y - cp.y) <= half.y:
+				in_view.append(e)
+	if in_view.size() > 0:
+		return in_view
+	return all_enemies

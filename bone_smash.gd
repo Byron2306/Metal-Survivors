@@ -17,11 +17,21 @@ const BASE_DURATION: float      = 1.4
 @onready var player = get_tree().get_first_node_in_group("player")
 
 var has_reached_target: bool = false
+var _base_scale: Vector2 = Vector2.ONE
 
 func _ready():
+	_base_scale = scale
 	# ─── Tome (size) ──────────────────────────────────────────────
-	collision_shape.shape.radius = BASE_RADIUS * (1 + player.spell_size)
-	smash_sprite.scale           = Vector2.ONE * (1 + player.spell_size)
+	if player:
+		var size_mult = (1.0 + player.spell_size)
+		scale = _base_scale * size_mult
+		# Scale both sprites to match
+		bone_sprite.scale = Vector2.ONE * size_mult
+		smash_sprite.scale = Vector2.ONE * size_mult
+	# Keep the authored collision radius; scaling handles growth.
+	var circle := collision_shape.shape as CircleShape2D
+	if circle:
+		circle.radius = BASE_RADIUS
 
 func _physics_process(delta: float) -> void:
 	if has_reached_target:
@@ -37,7 +47,9 @@ func _physics_process(delta: float) -> void:
 		global_position.y = target_position.y
 		bone_sprite.visible = false
 		smash_sprite.visible = true
-		smash_sprite.position = Vector2(0, -65.45)
+		# Position accounts for scaled sprite size
+		var offset_y = -65.45 * smash_sprite.scale.y
+		smash_sprite.position = Vector2(0, offset_y)
 		collision_shape.position = smash_sprite.position
 		audio_player.play()
 		has_reached_target = true
